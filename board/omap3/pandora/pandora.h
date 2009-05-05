@@ -253,7 +253,7 @@ const omap3_sysinfo sysinfo = {
 							 /* - WIFI_IRQ*/\
  MUX_VAL(CP(MCBSP1_FSX),	(IEN  | PTD | DIS | M4)) /*GPIO_161*/\
 							 /* - nIRQ_NUB1*/\
- MUX_VAL(CP(CAM_WEN),		(IEN  | PTU | DIS | M4)) /*GPIO_167*/\
+ MUX_VAL(CP(CAM_STROBE),	(IEN  | PTU | DIS | M4)) /*GPIO_126*/\
 							 /* - nIRQ_NUB2*/\
  /*Various other stuff*/\
  MUX_VAL(CP(CAM_VS),		(IEN  | PTU | DIS | M4)) /*GPIO_95*/\
@@ -264,7 +264,7 @@ const omap3_sysinfo sysinfo = {
 							 /* - START_ADC*/\
  MUX_VAL(CP(ETK_D8_ES2),	(IEN  | PTD | DIS | M4)) /*GPIO_22*/\
 							 /* - MSECURE*/\
- MUX_VAL(CP(CAM_STROBE),	(IEN  | PTU | DIS | M4)) /*GPIO_126*/\
+ MUX_VAL(CP(CAM_WEN),		(IEN  | PTU | DIS | M4)) /*GPIO_167*/\
 							 /* - HP_DETECT*/\
  /*External Resets and Enables*/\
  MUX_VAL(CP(ETK_D0_ES2),	(IDIS | PTD | DIS | M4)) /*GPIO_14*/\
