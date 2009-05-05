@@ -24,7 +24,7 @@
 VERSION = 2009
 PATCHLEVEL = 03
 SUBLEVEL =
-EXTRAVERSION = -rc1
+EXTRAVERSION =
 ifneq "$(SUBLEVEL)" ""
 U_BOOT_VERSION = $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
 else
@@ -921,6 +921,9 @@ IVMS8_config:	unconfig
 		 }
 	@$(MKCONFIG) -a IVMS8 ppc mpc8xx ivm
 
+kmsupx4_config:		unconfig
+	@$(MKCONFIG) $(@:_config=) ppc mpc8xx km8xx keymile
+
 KUP4K_config	:	unconfig
 	@$(MKCONFIG) $(@:_config=) ppc mpc8xx kup4k kup
 
@@ -938,7 +941,7 @@ MBX860T_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) ppc mpc8xx mbx8xx
 
 mgsuvd_config:		unconfig
-	@$(MKCONFIG) $(@:_config=) ppc mpc8xx mgsuvd keymile
+	@$(MKCONFIG) $(@:_config=) ppc mpc8xx km8xx keymile
 
 MHPC_config:		unconfig
 	@$(MKCONFIG) $(@:_config=) ppc mpc8xx mhpc eltec
@@ -3029,8 +3032,12 @@ apollon_config		: unconfig
 imx31_litekit_config	: unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm1136 imx31_litekit NULL mx31
 
+imx31_phycore_eet_config \
 imx31_phycore_config	: unconfig
-	@$(MKCONFIG) $(@:_config=) arm arm1136 imx31_phycore NULL mx31
+	@if [ -n "$(findstring _eet_,$@)" ]; then			\
+		echo "#define CONFIG_IMX31_PHYCORE_EET" >> $(obj)include/config.h;	\
+	fi
+	@$(MKCONFIG) -a imx31_phycore arm arm1136 imx31_phycore NULL mx31
 
 mx31ads_config		: unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm1136 mx31ads freescale mx31
@@ -3394,10 +3401,23 @@ sh7763rdp_config  :   unconfig
 	@echo "#define CONFIG_SH7763RDP 1" > $(obj)include/config.h
 	@$(MKCONFIG) -a $(@:_config=) sh sh4 sh7763rdp renesas
 
+xtract_sh7785lcr = $(subst _32bit,,$(subst _config,,$1))
+sh7785lcr_32bit_config \
 sh7785lcr_config  :   unconfig
 	@ >include/config.h
 	@echo "#define CONFIG_SH7785LCR 1" >> include/config.h
-	@$(MKCONFIG) -a $(@:_config=) sh sh4 sh7785lcr renesas
+	@if [ "$(findstring 32bit, $@)" ] ; then \
+		echo "#define CONFIG_SH_32BIT 1" >> $(obj)include/config.h ; \
+		cp $(obj)board/renesas/sh7785lcr/u-boot_32bit \
+			$(obj)board/renesas/sh7785lcr/u-boot.lds ; \
+		echo "TEXT_BASE = 0x8ff80000" > \
+			$(obj)board/renesas/sh7785lcr/config.tmp ; \
+		  $(XECHO) " ... enable 32-Bit Address Extended Mode" ; \
+	else \
+		cp $(obj)board/renesas/sh7785lcr/u-boot_29bit \
+			$(obj)board/renesas/sh7785lcr/u-boot.lds ; \
+	fi
+	@$(MKCONFIG) -a $(call xtract_sh7785lcr,$@) sh sh4 sh7785lcr renesas
 
 ap325rxa_config  :   unconfig
 	@mkdir -p $(obj)include

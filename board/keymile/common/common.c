@@ -295,11 +295,14 @@ int ivm_analyze_eeprom (unsigned char *buf, int len)
 
 int ivm_read_eeprom (void)
 {
+#if defined(CONFIG_I2C_MUX)
 	I2C_MUX_DEVICE *dev = NULL;
+#endif
 	uchar i2c_buffer[CONFIG_SYS_IVM_EEPROM_MAX_LEN];
 	uchar	*buf;
 	unsigned dev_addr = CONFIG_SYS_IVM_EEPROM_ADR;
 
+#if defined(CONFIG_I2C_MUX)
 	/* First init the Bus, select the Bus */
 #if defined(CONFIG_SYS_I2C_IVM_BUS)
 	dev = i2c_mux_ident_muxstring ((uchar *)CONFIG_SYS_I2C_IVM_BUS);
@@ -313,12 +316,13 @@ int ivm_read_eeprom (void)
 		return -1;
 	}
 	i2c_set_bus_num (dev->busid);
+#endif
 
 	buf = (unsigned char *) getenv ("EEprom_ivm_addr");
 	if (buf != NULL)
 		dev_addr = simple_strtoul ((char *)buf, NULL, 16);
 
-	if (eeprom_read (dev_addr, 0, i2c_buffer, CONFIG_SYS_IVM_EEPROM_MAX_LEN) != 0) {
+	if (i2c_read(dev_addr, 0, 1, i2c_buffer, CONFIG_SYS_IVM_EEPROM_MAX_LEN) != 0) {
 		printf ("Error reading EEprom\n");
 		return -2;
 	}
@@ -390,7 +394,7 @@ static void setports (int gpio)
 #endif
 #endif
 
-#if defined(CONFIG_MGSUVD)
+#if defined(CONFIG_KM8XX)
 static void set_sda (int state)
 {
 	I2C_SDA(state);

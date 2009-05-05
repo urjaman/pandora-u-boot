@@ -210,6 +210,8 @@ int misc_init_r(void)
 	writel(GPIO28, &gpio5_base->setdataout);
 	writel(GPIO4, &gpio6_base->setdataout);
 
+	dieid_num_r();
+
 	lcd_init();
 
 	/* this block will move to kernel. */
