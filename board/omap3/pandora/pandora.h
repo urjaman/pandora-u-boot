@@ -147,21 +147,21 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(DSS_DATA22),	(IDIS | PTD | DIS | M0)) /*DSS_DATA22*/\
  MUX_VAL(CP(DSS_DATA23),	(IDIS | PTD | DIS | M0)) /*DSS_DATA23*/\
  /*GPIO based game buttons*/\
- MUX_VAL(CP(CAM_XCLKA),		(IEN  | PTU | DIS | M4)) /*GPIO_96 - LEFT*/\
- MUX_VAL(CP(CAM_PCLK),		(IEN  | PTU | DIS | M4)) /*GPIO_97 - L2*/\
- MUX_VAL(CP(CAM_FLD),		(IEN  | PTU | DIS | M4)) /*GPIO_98 - RIGHT*/\
- MUX_VAL(CP(CAM_D0),		(IEN  | PTU | DIS | M4)) /*GPIO_99 - MENU*/\
- MUX_VAL(CP(CAM_D1),		(IEN  | PTU | DIS | M4)) /*GPIO_100 - START*/\
- MUX_VAL(CP(CAM_D2),		(IEN  | PTU | DIS | M4)) /*GPIO_101 - Y*/\
- MUX_VAL(CP(CAM_D3),		(IEN  | PTU | DIS | M4)) /*GPIO_102 - L1*/\
- MUX_VAL(CP(CAM_D4),		(IEN  | PTU | DIS | M4)) /*GPIO_103 - DOWN*/\
- MUX_VAL(CP(CAM_D5),		(IEN  | PTU | DIS | M4)) /*GPIO_104 - SELECT*/\
- MUX_VAL(CP(CAM_D6),		(IEN  | PTU | DIS | M4)) /*GPIO_105 - R1*/\
- MUX_VAL(CP(CAM_D7),		(IEN  | PTU | DIS | M4)) /*GPIO_106 - B*/\
- MUX_VAL(CP(CAM_D8),		(IEN  | PTU | DIS | M4)) /*GPIO_107 - R2*/\
- MUX_VAL(CP(CAM_D10),		(IEN  | PTU | DIS | M4)) /*GPIO_109 - X*/\
- MUX_VAL(CP(CAM_D11),		(IEN  | PTU | DIS | M4)) /*GPIO_110 - UP*/\
- MUX_VAL(CP(CAM_XCLKB),		(IEN  | PTU | DIS | M4)) /*GPIO_111 - A*/\
+ MUX_VAL(CP(CAM_XCLKA),		(IEN  | PTU | EN  | M4)) /*GPIO_96 - LEFT*/\
+ MUX_VAL(CP(CAM_PCLK),		(IEN  | PTU | EN  | M4)) /*GPIO_97 - L2*/\
+ MUX_VAL(CP(CAM_FLD),		(IEN  | PTU | EN  | M4)) /*GPIO_98 - RIGHT*/\
+ MUX_VAL(CP(CAM_D0),		(IEN  | PTU | EN  | M4)) /*GPIO_99 - MENU*/\
+ MUX_VAL(CP(CAM_D1),		(IEN  | PTU | EN  | M4)) /*GPIO_100 - START*/\
+ MUX_VAL(CP(CAM_D2),		(IEN  | PTU | EN  | M4)) /*GPIO_101 - Y*/\
+ MUX_VAL(CP(CAM_D3),		(IEN  | PTU | EN  | M4)) /*GPIO_102 - L1*/\
+ MUX_VAL(CP(CAM_D4),		(IEN  | PTU | EN  | M4)) /*GPIO_103 - DOWN*/\
+ MUX_VAL(CP(CAM_D5),		(IEN  | PTU | EN  | M4)) /*GPIO_104 - SELECT*/\
+ MUX_VAL(CP(CAM_D6),		(IEN  | PTU | EN  | M4)) /*GPIO_105 - R1*/\
+ MUX_VAL(CP(CAM_D7),		(IEN  | PTU | EN  | M4)) /*GPIO_106 - B*/\
+ MUX_VAL(CP(CAM_D8),		(IEN  | PTU | EN  | M4)) /*GPIO_107 - R2*/\
+ MUX_VAL(CP(CAM_D10),		(IEN  | PTU | EN  | M4)) /*GPIO_109 - X*/\
+ MUX_VAL(CP(CAM_D11),		(IEN  | PTU | EN  | M4)) /*GPIO_110 - UP*/\
+ MUX_VAL(CP(CAM_XCLKB),		(IEN  | PTU | EN  | M4)) /*GPIO_111 - A*/\
  /*Audio Interface To External DAC (Headphone, Speakers)*/\
  MUX_VAL(CP(MCBSP2_FSX),	(IDIS | PTD | DIS | M0)) /*McBSP2_FSX*/\
  MUX_VAL(CP(MCBSP2_CLKX),	(IDIS | PTD | DIS | M0)) /*McBSP2_CLKX*/\
@@ -211,13 +211,13 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(MCBSP4_DX),		(IDIS | PTD | DIS | M0)) /*McBSP4_DX*/\
  MUX_VAL(CP(MCBSP4_FSX),	(IEN  | PTD | DIS | M0)) /*McBSP4_FSX*/\
  /*GPIO definitions for muxed pins on AV connector*/\
- MUX_VAL(CP(UART2_CTS),		(IEN  | PTU | EN  | M4)) /*GPIO_144,*/\
+ MUX_VAL(CP(UART2_CTS),		(IEN  | PTD | EN  | M4)) /*GPIO_144,*/\
 							 /*UART2_CTS*/\
- MUX_VAL(CP(UART2_RTS),		(IEN  | PTU | DIS | M4)) /*GPIO_145,*/\
+ MUX_VAL(CP(UART2_RTS),		(IEN  | PTD | EN  | M4)) /*GPIO_145,*/\
 							 /*UART2_RTS*/\
- MUX_VAL(CP(UART2_TX),		(IEN  | PTU | EN  | M4)) /*GPIO_146,*/\
+ MUX_VAL(CP(UART2_TX),		(IEN  | PTD | EN  | M4)) /*GPIO_146,*/\
 							 /*UART2_TX*/\
- MUX_VAL(CP(UART2_RX),		(IEN  | PTD | DIS | M4)) /*GPIO_147,*/\
+ MUX_VAL(CP(UART2_RX),		(IEN  | PTD | EN  | M4)) /*GPIO_147,*/\
 							 /*UART2_RX*/\
  /*Serial Interface (Peripheral boot, Linux console, on AV connector)*/\
  MUX_VAL(CP(UART3_RX_IRRX),	(IEN  | PTD | DIS | M0)) /*UART3_RX*/\
@@ -232,29 +232,29 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(MCBSP1_DR),		(IDIS | PTD | DIS | M4)) /*GPIO_159*/\
 							 /* - LED_WIFI*/\
  /*Switches*/\
- MUX_VAL(CP(MCSPI1_CS2),	(IEN  | PTU | DIS | M4)) /*GPIO_176*/\
+ MUX_VAL(CP(MCSPI1_CS2),	(IEN  | PTU | EN  | M4)) /*GPIO_176*/\
 							 /* - nHOLD_SWITCH*/\
- MUX_VAL(CP(CAM_D9),		(IEN  | PTU | DIS | M4)) /*GPIO_108*/\
+ MUX_VAL(CP(CAM_D9),		(IEN  | PTU | EN  | M4)) /*GPIO_108*/\
 							 /* - nLID_SWITCH*/\
  /*External IRQs*/\
- MUX_VAL(CP(CAM_HS),		(IEN  | PTU | DIS | M4)) /*GPIO_94*/\
+ MUX_VAL(CP(CAM_HS),		(IEN  | PTU | EN  | M4)) /*GPIO_94*/\
 							 /* - nTOUCH_IRQ*/\
  MUX_VAL(CP(ETK_D7_ES2),	(IEN  | PTD | DIS | M4)) /*GPIO_21*/\
 							 /* - WIFI_IRQ*/\
- MUX_VAL(CP(MCBSP1_FSX),	(IEN  | PTD | DIS | M4)) /*GPIO_161*/\
+ MUX_VAL(CP(MCBSP1_FSX),	(IEN  | PTU | EN  | M4)) /*GPIO_161*/\
 							 /* - nIRQ_NUB1*/\
- MUX_VAL(CP(CAM_STROBE),	(IEN  | PTU | DIS | M4)) /*GPIO_126*/\
+ MUX_VAL(CP(CAM_STROBE),	(IEN  | PTU | EN  | M4)) /*GPIO_126*/\
 							 /* - nIRQ_NUB2*/\
  /*Various other stuff*/\
- MUX_VAL(CP(CAM_VS),		(IEN  | PTU | DIS | M4)) /*GPIO_95*/\
+ MUX_VAL(CP(CAM_VS),		(IEN  | PTU | EN  | M4)) /*GPIO_95*/\
 							 /* - nTOUCH_BUSY*/\
- MUX_VAL(CP(UART3_CTS_RCTX),	(IEN  | PTD | DIS | M4)) /*GPIO_163*/\
+ MUX_VAL(CP(UART3_CTS_RCTX),	(IEN  | PTU | EN  | M4)) /*GPIO_163*/\
 							 /* - nOC_USB5*/\
  MUX_VAL(CP(MCBSP1_CLKX),	(IDIS | PTD | DIS | M4)) /*GPIO_162*/\
 							 /* - START_ADC*/\
- MUX_VAL(CP(ETK_D8_ES2),	(IEN  | PTD | DIS | M4)) /*GPIO_22*/\
+ MUX_VAL(CP(ETK_D8_ES2),	(IEN  | PTU | EN  | M4)) /*GPIO_22*/\
 							 /* - MSECURE*/\
- MUX_VAL(CP(CAM_WEN),		(IEN  | PTU | DIS | M4)) /*GPIO_167*/\
+ MUX_VAL(CP(CAM_WEN),		(IEN  | PTU | EN  | M4)) /*GPIO_167*/\
 							 /* - HP_DETECT*/\
  /*External Resets and Enables*/\
  MUX_VAL(CP(ETK_D0_ES2),	(IDIS | PTD | DIS | M4)) /*GPIO_14*/\
