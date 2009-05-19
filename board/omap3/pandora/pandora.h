@@ -147,6 +147,7 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(DSS_DATA22),	(IDIS | PTD | DIS | M0)) /*DSS_DATA22*/\
  MUX_VAL(CP(DSS_DATA23),	(IDIS | PTD | DIS | M0)) /*DSS_DATA23*/\
  /*GPIO based game buttons*/\
+ MUX_VAL(CP(SYS_BOOT5),		(IEN  | PTD | EN  | M4)) /*GPIO_7 - START*/\
  MUX_VAL(CP(CAM_XCLKA),		(IEN  | PTU | EN  | M4)) /*GPIO_96 - LEFT*/\
  MUX_VAL(CP(CAM_PCLK),		(IEN  | PTU | EN  | M4)) /*GPIO_97 - L2*/\
  MUX_VAL(CP(CAM_FLD),		(IEN  | PTU | EN  | M4)) /*GPIO_98 - RIGHT*/\
@@ -176,6 +177,7 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(MMC1_DAT1),		(IEN  | PTU | EN  | M0)) /*MMC1_DAT1*/\
  MUX_VAL(CP(MMC1_DAT2),		(IEN  | PTU | EN  | M0)) /*MMC1_DAT2*/\
  MUX_VAL(CP(MMC1_DAT3),		(IEN  | PTU | EN  | M0)) /*MMC1_DAT3*/\
+ MUX_VAL(CP(MMC1_DAT4),		(IEN  | PTU | EN  | M4)) /*GPIO_126 - MMC1_WP*/\
  /*Expansion card 2*/\
  MUX_VAL(CP(MMC2_CLK),		(IDIS | PTD | DIS | M0)) /*MMC2_CLK*/\
  MUX_VAL(CP(MMC2_CMD),		(IEN  | PTU | EN  | M0)) /*MMC2_CMD*/\
@@ -243,19 +245,15 @@ const omap3_sysinfo sysinfo = {
 							 /* - WIFI_IRQ*/\
  MUX_VAL(CP(MCBSP1_FSX),	(IEN  | PTU | EN  | M4)) /*GPIO_161*/\
 							 /* - nIRQ_NUB1*/\
- MUX_VAL(CP(CAM_STROBE),	(IEN  | PTU | EN  | M4)) /*GPIO_126*/\
+ MUX_VAL(CP(MCBSP1_CLKX),	(IEN  | PTU | EN  | M4)) /*GPIO_162*/\
 							 /* - nIRQ_NUB2*/\
  /*Various other stuff*/\
- MUX_VAL(CP(CAM_VS),		(IEN  | PTU | EN  | M4)) /*GPIO_95*/\
-							 /* - nTOUCH_BUSY*/\
  MUX_VAL(CP(UART3_CTS_RCTX),	(IEN  | PTU | EN  | M4)) /*GPIO_163*/\
 							 /* - nOC_USB5*/\
- MUX_VAL(CP(MCBSP1_CLKX),	(IDIS | PTD | DIS | M4)) /*GPIO_162*/\
-							 /* - START_ADC*/\
  MUX_VAL(CP(ETK_D8_ES2),	(IEN  | PTU | EN  | M4)) /*GPIO_22*/\
 							 /* - MSECURE*/\
- MUX_VAL(CP(CAM_WEN),		(IEN  | PTU | EN  | M4)) /*GPIO_167*/\
-							 /* - HP_DETECT*/\
+ MUX_VAL(CP(CSI2_DY1),		(IEN  | PTD | DIS | M4)) /*GPIO_115*/\
+							 /* - POP_OVERHEAT*/\
  /*External Resets and Enables*/\
  MUX_VAL(CP(ETK_D0_ES2),	(IDIS | PTD | DIS | M4)) /*GPIO_14*/\
 							 /* - nHDPHN_SHUTDOWN*/\
@@ -269,6 +267,13 @@ const omap3_sysinfo sysinfo = {
 							 /* - RESET_NUBS*/\
  MUX_VAL(CP(UART3_RTS_SD),	(IDIS | PTU | EN  | M4)) /*GPIO_164*/\
 							 /* - EN_USB_5V*/\
+ /*Spare GPIOs*/\
+ MUX_VAL(CP(GPMC_NCS7),		(IEN  | PTD | EN  | M4)) /*GPIO_58*/\
+ MUX_VAL(CP(GPMC_WAIT2),	(IEN  | PTD | EN  | M4)) /*GPIO_64*/\
+ MUX_VAL(CP(GPMC_WAIT3),	(IEN  | PTD | EN  | M4)) /*GPIO_65*/\
+ MUX_VAL(CP(CAM_VS),		(IEN  | PTD | EN  | M4)) /*GPIO_95*/\
+ MUX_VAL(CP(CAM_WEN),		(IEN  | PTD | EN  | M4)) /*GPIO_167*/\
+ MUX_VAL(CP(HDQ_SIO),		(IEN  | PTD | EN  | M4)) /*GPIO_170*/\
  /*HS USB OTG Port (connects to HSUSB0)*/\
  MUX_VAL(CP(HSUSB0_CLK),	(IEN  | PTD | DIS | M0)) /*HSUSB0_CLK*/\
  MUX_VAL(CP(HSUSB0_STP),	(IDIS | PTU | EN  | M0)) /*HSUSB0_STP*/\
@@ -319,7 +324,6 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(SYS_BOOT2),		(IEN  | PTD | DIS | M4)) /*GPIO_4*/\
  MUX_VAL(CP(SYS_BOOT3),		(IEN  | PTD | DIS | M4)) /*GPIO_5*/\
  MUX_VAL(CP(SYS_BOOT4),		(IEN  | PTD | DIS | M4)) /*GPIO_6*/\
- MUX_VAL(CP(SYS_BOOT5),		(IEN  | PTD | DIS | M4)) /*GPIO_7*/\
  MUX_VAL(CP(SYS_BOOT6),		(IEN  | PTD | DIS | M4)) /*GPIO_8*/\
  MUX_VAL(CP(SYS_OFF_MODE),	(IEN  | PTD | DIS | M0)) /*SYS_OFF_MODE*/\
  /*JTAG*/\
