@@ -147,22 +147,22 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(DSS_DATA22),	(IDIS | PTD | DIS | M0)) /*DSS_DATA22*/\
  MUX_VAL(CP(DSS_DATA23),	(IDIS | PTD | DIS | M0)) /*DSS_DATA23*/\
  /*GPIO based game buttons*/\
- MUX_VAL(CP(SYS_BOOT5),		(IEN  | PTD | EN  | M4)) /*GPIO_7 - START*/\
- MUX_VAL(CP(CAM_XCLKA),		(IEN  | PTU | EN  | M4)) /*GPIO_96 - LEFT*/\
- MUX_VAL(CP(CAM_PCLK),		(IEN  | PTU | EN  | M4)) /*GPIO_97 - L2*/\
- MUX_VAL(CP(CAM_FLD),		(IEN  | PTU | EN  | M4)) /*GPIO_98 - RIGHT*/\
- MUX_VAL(CP(CAM_D0),		(IEN  | PTU | EN  | M4)) /*GPIO_99 - MENU*/\
- MUX_VAL(CP(CAM_D1),		(IEN  | PTU | EN  | M4)) /*GPIO_100 - START*/\
- MUX_VAL(CP(CAM_D2),		(IEN  | PTU | EN  | M4)) /*GPIO_101 - Y*/\
- MUX_VAL(CP(CAM_D3),		(IEN  | PTU | EN  | M4)) /*GPIO_102 - L1*/\
- MUX_VAL(CP(CAM_D4),		(IEN  | PTU | EN  | M4)) /*GPIO_103 - DOWN*/\
- MUX_VAL(CP(CAM_D5),		(IEN  | PTU | EN  | M4)) /*GPIO_104 - SELECT*/\
- MUX_VAL(CP(CAM_D6),		(IEN  | PTU | EN  | M4)) /*GPIO_105 - R1*/\
- MUX_VAL(CP(CAM_D7),		(IEN  | PTU | EN  | M4)) /*GPIO_106 - B*/\
- MUX_VAL(CP(CAM_D8),		(IEN  | PTU | EN  | M4)) /*GPIO_107 - R2*/\
- MUX_VAL(CP(CAM_D10),		(IEN  | PTU | EN  | M4)) /*GPIO_109 - X*/\
- MUX_VAL(CP(CAM_D11),		(IEN  | PTU | EN  | M4)) /*GPIO_110 - UP*/\
- MUX_VAL(CP(CAM_XCLKB),		(IEN  | PTU | EN  | M4)) /*GPIO_111 - A*/\
+ MUX_VAL(CP(SYS_BOOT5),		(IEN  | PTD | DIS | M4)) /*GPIO_7 - START*/\
+ MUX_VAL(CP(CAM_XCLKA),		(IEN  | PTD | DIS | M4)) /*GPIO_96 - LEFT*/\
+ MUX_VAL(CP(CAM_PCLK),		(IEN  | PTD | DIS | M4)) /*GPIO_97 - L2*/\
+ MUX_VAL(CP(CAM_FLD),		(IEN  | PTD | DIS | M4)) /*GPIO_98 - RIGHT*/\
+ MUX_VAL(CP(CAM_D0),		(IEN  | PTD | DIS | M4)) /*GPIO_99 - MENU*/\
+ MUX_VAL(CP(CAM_D1),		(IEN  | PTD | DIS | M4)) /*GPIO_100 - START*/\
+ MUX_VAL(CP(CAM_D2),		(IEN  | PTD | DIS | M4)) /*GPIO_101 - Y*/\
+ MUX_VAL(CP(CAM_D3),		(IEN  | PTD | DIS | M4)) /*GPIO_102 - L1*/\
+ MUX_VAL(CP(CAM_D4),		(IEN  | PTD | DIS | M4)) /*GPIO_103 - DOWN*/\
+ MUX_VAL(CP(CAM_D5),		(IEN  | PTD | DIS | M4)) /*GPIO_104 - SELECT*/\
+ MUX_VAL(CP(CAM_D6),		(IEN  | PTD | DIS | M4)) /*GPIO_105 - R1*/\
+ MUX_VAL(CP(CAM_D7),		(IEN  | PTD | DIS | M4)) /*GPIO_106 - B*/\
+ MUX_VAL(CP(CAM_D8),		(IEN  | PTD | DIS | M4)) /*GPIO_107 - R2*/\
+ MUX_VAL(CP(CAM_D10),		(IEN  | PTD | DIS | M4)) /*GPIO_109 - X*/\
+ MUX_VAL(CP(CAM_D11),		(IEN  | PTD | DIS | M4)) /*GPIO_110 - UP*/\
+ MUX_VAL(CP(CAM_XCLKB),		(IEN  | PTD | DIS | M4)) /*GPIO_111 - A*/\
  /*Audio Interface To External DAC (Headphone, Speakers)*/\
  MUX_VAL(CP(MCBSP2_FSX),	(IDIS | PTD | DIS | M0)) /*McBSP2_FSX*/\
  MUX_VAL(CP(MCBSP2_CLKX),	(IDIS | PTD | DIS | M0)) /*McBSP2_CLKX*/\
@@ -271,7 +271,7 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(GPMC_NCS7),		(IEN  | PTD | EN  | M4)) /*GPIO_58*/\
  MUX_VAL(CP(GPMC_WAIT2),	(IEN  | PTD | EN  | M4)) /*GPIO_64*/\
  MUX_VAL(CP(GPMC_WAIT3),	(IEN  | PTD | EN  | M4)) /*GPIO_65*/\
- MUX_VAL(CP(CAM_VS),		(IEN  | PTD | EN  | M4)) /*GPIO_95*/\
+ MUX_VAL(CP(CAM_VS),		(IEN  | PTU | EN  | M4)) /*GPIO_95*/\
  MUX_VAL(CP(CAM_WEN),		(IEN  | PTD | EN  | M4)) /*GPIO_167*/\
  MUX_VAL(CP(HDQ_SIO),		(IEN  | PTD | EN  | M4)) /*GPIO_170*/\
  /*HS USB OTG Port (connects to HSUSB0)*/\
