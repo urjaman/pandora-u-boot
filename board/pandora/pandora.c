@@ -36,6 +36,7 @@
 #include <asm/arch/sys_proto.h>
 #include <asm/mach-types.h>
 #include "pandora.h"
+#include "logo.h"
 
 /*
  * Hacky DSS/LCD initialization code
@@ -176,6 +177,20 @@ static void lcd_init(void)
 	*((volatile uint *) 0x48098048) = 0x00000000; /* Disable SPI1, CS1 */
 }
 
+static void draw_logo(void)
+{
+	unsigned short *dest = (unsigned short *)FRAMEBUFFER_ADDRESS;
+	unsigned short *logo = (unsigned short *)logo_data;
+	int i;
+
+	dest += 800 * 480/2 + 800/2;
+	dest -= 800 * logo_height/2;
+	dest -= logo_width/2;
+
+	for (i = 0; i < logo_height; i++, dest += 800, logo += logo_width)
+		memcpy(dest, logo, logo_width * 2);
+}
+
 /*
  * Routine: board_init
  * Description: Early hardware init.
@@ -219,6 +234,7 @@ int misc_init_r(void)
 
 	dieid_num_r();
 	lcd_init();
+	draw_logo();
 
 	/* Enable battery backup capacitor (3.2V, 0.5mA charge current) */
 	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x1e,
