@@ -174,7 +174,6 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(MMC1_DAT1),		(IEN  | PTU | EN  | M0)) /*MMC1_DAT1*/\
  MUX_VAL(CP(MMC1_DAT2),		(IEN  | PTU | EN  | M0)) /*MMC1_DAT2*/\
  MUX_VAL(CP(MMC1_DAT3),		(IEN  | PTU | EN  | M0)) /*MMC1_DAT3*/\
- MUX_VAL(CP(MMC1_DAT4),		(IEN  | PTD | DIS | M4)) /*GPIO_126 - MMC1_WP*/\
  /*Expansion card 2*/\
  MUX_VAL(CP(MMC2_CLK),		(IDIS | PTD | DIS | M0)) /*MMC2_CLK*/\
  MUX_VAL(CP(MMC2_CMD),		(IEN  | PTU | EN  | M0)) /*MMC2_CMD*/\
@@ -242,7 +241,7 @@ const omap3_sysinfo sysinfo = {
 							 /* - WIFI_IRQ*/\
  MUX_VAL(CP(MCBSP1_FSX),	(IEN  | PTD | DIS | M4)) /*GPIO_161*/\
 							 /* - nIRQ_NUB1*/\
- MUX_VAL(CP(MCBSP1_CLKX),	(IEN  | PTD | DIS | M4)) /*GPIO_162*/\
+ MUX_VAL(CP(CAM_STROBE),	(IEN  | PTD | DIS | M4)) /*GPIO_126*/\
 							 /* - nIRQ_NUB2*/\
  /*Various other stuff*/\
  MUX_VAL(CP(UART3_CTS_RCTX),	(IEN  | PTD | DIS | M4)) /*GPIO_163*/\
