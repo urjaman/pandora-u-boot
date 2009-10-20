@@ -37,10 +37,13 @@
 #include <asm/mach-types.h>
 #include <i2c.h>
 #include "pandora.h"
+#include "logo.h"
 
 /*
  * Hacky DSS/LCD initialization code
  */
+
+#define FRAMEBUFFER_ADDRESS 0x80598000
 
 static void sendLcdSpiCommand(uint addr, uint data)
 {
@@ -72,8 +75,8 @@ static void dss_lcd_init(void)
 
 	*((volatile uint *) 0x4805047c) = 0x01DF031F; /* display size */
 	*((volatile uint *) 0x48050478) = 0x00ef027f;
-	*((volatile uint *) 0x48050480) = 0x80500000;
-	*((volatile uint *) 0x48050484) = 0x80500000;
+	*((volatile uint *) 0x48050480) = FRAMEBUFFER_ADDRESS;
+	*((volatile uint *) 0x48050484) = FRAMEBUFFER_ADDRESS;
 	*((volatile uint *) 0x4805048c) = 0x01DF031F;
 	*((volatile uint *) 0x480504a0) = 0x0000008d;
 	*((volatile uint *) 0x480504a4) = 0x03c00200;
@@ -132,10 +135,9 @@ static void lcd_init(void)
 	byte = 0x04;
 	i2c_write(0x4B, 0x75, 1, &byte, 1);
 
-	/* Clear frame buffer */
-	memset((void *)0x80500000, 0, 800*480*2);
+	/* Clear frame buffer (takes ~100ms) */
+	memset((void *)FRAMEBUFFER_ADDRESS, 0, 800*480*2);
 
-	udelay(11000);
 	*((volatile uint *) 0x49056094) = 0x20000000; /* Bring LCD out of reset (157) */
 	udelay(2000); /* Need to wait at least 1ms after reset to start sending signals */
 
@@ -168,6 +170,20 @@ static void lcd_init(void)
 	sendLcdSpiCommand(0x21, 0xf0);
 
 	*((volatile uint *) 0x48098048) = 0x00000000; /* Disable SPI1, CS1 */
+}
+
+static void draw_logo(void)
+{
+	unsigned short *dest = (unsigned short *)FRAMEBUFFER_ADDRESS;
+	unsigned short *logo = (unsigned short *)logo_data;
+	int i;
+
+	dest += 800 * 480/2 + 800/2;
+	dest -= 800 * logo_height/2;
+	dest -= logo_width/2;
+
+	for (i = 0; i < logo_height; i++, dest += 800, logo += logo_width)
+		memcpy(dest, logo, logo_width * 2);
 }
 
 /*
@@ -219,6 +235,7 @@ int misc_init_r(void)
 
 	dieid_num_r();
 	lcd_init();
+	draw_logo();
 
 	/* this stuff should move to kernel. */
 	/* set vaux4 to 2.8V (TOUCH, NUBS) */
