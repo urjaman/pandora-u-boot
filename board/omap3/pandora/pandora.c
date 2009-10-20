@@ -81,6 +81,10 @@ int misc_init_r(void)
 	writel(GPIO28, &gpio5_base->setdataout);
 	writel(GPIO4, &gpio6_base->setdataout);
 
+	/* Enable battery backup capacitor */
+	byte = 0x1E;	/* 3.2V, 0.5mA charge current */
+	i2c_write(0x4B, 0x6D, 1, &byte, 1);
+
 	dieid_num_r();
 
 	/* this stuff should move to kernel. */
@@ -95,6 +99,12 @@ int misc_init_r(void)
 	i2c_write(0x4B, 0x95, 1, &byte, 1);
 	byte = 0x20;
 	i2c_write(0x4B, 0x92, 1, &byte, 1);
+
+	/* set vaux2 to 1.8V (USB HOST PHY power) */
+	byte = 0x05;
+	i2c_write(0x4B, 0x79, 1, &byte, 1);
+	byte = 0x20;
+	i2c_write(0x4B, 0x76, 1, &byte, 1);
 
 	return 0;
 }
