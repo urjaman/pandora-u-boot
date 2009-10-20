@@ -35,6 +35,7 @@
 #include <asm/arch/mux.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/mach-types.h>
+#include <i2c.h>
 #include "pandora.h"
 
 /*
@@ -64,6 +65,7 @@ int misc_init_r(void)
 	struct gpio *gpio4_base = (struct gpio *)OMAP34XX_GPIO4_BASE;
 	struct gpio *gpio5_base = (struct gpio *)OMAP34XX_GPIO5_BASE;
 	struct gpio *gpio6_base = (struct gpio *)OMAP34XX_GPIO6_BASE;
+	unsigned char byte;
 
 	twl4030_power_init();
 	twl4030_led_init();
@@ -80,6 +82,19 @@ int misc_init_r(void)
 	writel(GPIO4, &gpio6_base->setdataout);
 
 	dieid_num_r();
+
+	/* this stuff should move to kernel. */
+	/* set vaux4 to 2.8V (TOUCH, NUBS) */
+	byte = 0x0A;
+	i2c_write(0x4B, 0x81, 1, &byte, 1);
+	byte = 0x20;
+	i2c_write(0x4B, 0x7E, 1, &byte, 1);
+
+	/* set vsim to 2.8V (AUDIO DAC external) */
+	byte = 0x04;
+	i2c_write(0x4B, 0x95, 1, &byte, 1);
+	byte = 0x20;
+	i2c_write(0x4B, 0x92, 1, &byte, 1);
 
 	return 0;
 }
