@@ -219,7 +219,7 @@ const omap3_sysinfo sysinfo = {
  MUX_VAL(CP(UART2_RX),		(IEN  | PTD | EN  | M4)) /*GPIO_147,*/\
 							 /*UART2_RX*/\
  /*Serial Interface (Peripheral boot, Linux console, on AV connector)*/\
- MUX_VAL(CP(UART3_RX_IRRX),	(IEN  | PTD | DIS | M0)) /*UART3_RX*/\
+ MUX_VAL(CP(UART3_RX_IRRX),	(IEN  | PTU | EN  | M0)) /*UART3_RX*/\
  MUX_VAL(CP(UART3_TX_IRTX),	(IDIS | PTD | DIS | M0)) /*UART3_TX*/\
  /*LEDs (Controlled by OMAP)*/\
  MUX_VAL(CP(MMC1_DAT6),		(IDIS | PTD | DIS | M4)) /*GPIO_128*/\
