@@ -123,10 +123,10 @@ static void lcd_init(void)
 	*((volatile uint *) 0x48098040) = 0x020127DC;
 	*((volatile uint *) 0x48098048) = 0x00000001; /* CS1 */
 
-	/* Set GPIOs on T2 (Turn on LCD BL) */
-	byte = 0xC0;
+	/* Set GPIO on T2 (Turn on LCD BL) */
+	byte = 0x40;
 	i2c_write(0x49, 0x9B, 1, &byte, 1);
-	byte = 0xC0;
+	byte = 0x40;
 	i2c_write(0x49, 0x9E, 1, &byte, 1);
 
 	/* VAUX1 = 3.0V    (LCD) */
