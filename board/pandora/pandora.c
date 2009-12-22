@@ -80,6 +80,29 @@ int misc_init_r(void)
 
 	dieid_num_r();
 
+	/* Enable battery backup capacitor (3.2V, 0.5mA charge current) */
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x1e,
+			     TWL4030_PM_RECEIVER_BB_CFG);
+
+	/* this stuff should move to kernel. */
+	/* set vaux4 to ~2.85V (TOUCH, NUBS) */
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x0a,
+			     TWL4030_PM_RECEIVER_VAUX4_DEDICATED);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x20,
+			     TWL4030_PM_RECEIVER_VAUX4_DEV_GRP);
+
+	/* set vsim to 2.8V (AUDIO DAC external) */
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x04,
+			     TWL4030_PM_RECEIVER_VSIM_DEDICATED);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x20,
+			     TWL4030_PM_RECEIVER_VSIM_DEV_GRP);
+
+	/* set vaux2 to 1.8V (USB HOST PHY power) */
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x05,
+			     TWL4030_PM_RECEIVER_VAUX2_DEDICATED);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x20,
+			     TWL4030_PM_RECEIVER_VAUX2_DEV_GRP);
+
 	return 0;
 }
 
