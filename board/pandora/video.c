@@ -27,7 +27,7 @@ static void dss_lcd_init(uint base_addr)
 	*((volatile uint *) 0x48050444) = 0x00000004;
 	*((volatile uint *) 0x48050464) = 0x0d504300; /* horizontal timing */
 	*((volatile uint *) 0x48050468) = 0x02202700; /* vertical timing */
-	*((volatile uint *) 0x4805046c) = 0x00003000; /* polarities */
+	*((volatile uint *) 0x4805046c) = 0x00007000; /* polarities */
 
 	*((volatile uint *) 0x48050470) = 0x00010002;
 
@@ -43,6 +43,43 @@ static void dss_lcd_init(uint base_addr)
 	*((volatile uint *) 0x48050440) = 0x00018329;
 }
 
+/* SPI stuff to set correct clock polarity in the LCD */
+static void lcd_spi_init(void)
+{
+	/* Enable clock for SPI1 */
+	writel(readl(0x48004A00) | (1<<18), 0x48004A00);
+	writel(readl(0x48004A10) | (1<<18), 0x48004A10);
+
+	/* Reset module, wait for reset to complete */
+	writel(0x00000002, 0x48098010);
+	while ( !(readl(0x48098014) & 1) );
+
+	/* SPI1 base address = 0x48098000 for CS0,
+	 * for CS1 add 0x14 to the offset where applicable */
+	*((volatile uint *) 0x48098034) = 0x00000000; /* CS0 +8 */
+	*((volatile uint *) 0x48098048) = 0x00000000; /* CS1 +8 */
+	*((volatile uint *) 0x4809801C) = 0x00000000;
+	*((volatile uint *) 0x48098018) = 0xFFFFFFFF;
+	*((volatile uint *) 0x48098024) = 0x00000000;
+	*((volatile uint *) 0x48098028) = 0x00000000;
+	*((volatile uint *) 0x48098010) = 0x00000308;
+	*((volatile uint *) 0x48098040) = 0x020127DC;
+	*((volatile uint *) 0x48098048) = 0x00000001; /* CS1 */
+}
+
+static void lcd_spi_write(uint addr, uint data)
+{
+	data &= 0xff;
+	data |= (addr << 10) | (1 << 8);
+
+	while ( !(readl(0x48098044) & (1<<1)) );	/* wait for TXS */
+
+	writel(data, 0x4809804C);
+
+	while ( !(readl(0x48098044) & (1<<1)) );	/* wait for TXS */
+	while ( !(readl(0x48098044) & (1<<2)) );	/* wait for EOT */
+}
+
 static void lcd_init(void)
 {
 	DECLARE_GLOBAL_DATA_PTR;
@@ -55,6 +92,8 @@ static void lcd_init(void)
 	/* also GPIO164 (some audible noise otherwise) */
 	writel(0x10, 0x49058094);
 	writel(readl(0x49058034) & ~0x10, 0x49058034);
+
+	lcd_spi_init();
 
 	/* set VPLL2 to 1.8V */
 	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x05,
@@ -69,13 +108,15 @@ static void lcd_init(void)
 			     TWL4030_PM_RECEIVER_VAUX1_DEV_GRP);
 
 	/* Clear frame buffer */
-	//memset(gd->fb_base, 0, 800*480*2);
-	udelay(2000);
+	memset((void *)gd->fb_base, 0, 800*480*2);
 
 	writel(0x20000000, 0x49056094); /* Bring LCD out of reset (157) */
 	udelay(2000); /* Need to wait at least 1ms after reset to start sending signals */
 
 	dss_lcd_init((uint)gd->fb_base);
+
+	lcd_spi_write(0x02, 0x0f);
+	writel(0, 0x48098048); /* Disable SPI1, CS1 */
 
 	/* Set GPIOs on T2 (Turn on LCD BL) */
 	twl4030_i2c_read_u8(TWL4030_CHIP_INTBR, &d, TWL_INTBR_PMBR1);
