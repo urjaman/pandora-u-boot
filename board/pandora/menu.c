@@ -119,7 +119,7 @@ static void menu_init(void)
 	dev_desc = get_dev("mmc1", 0);
 	if (dev_desc == NULL) {
 		printf("dev desc null\n");
-		return;
+		goto finish;
 	}
 
 	/* kill stdout while we search for bootfiles */
@@ -163,6 +163,7 @@ found:
 		menu_items[menu_item_count++] = mitem;
 	}
 
+finish:
 	if (menu_item_count < ARRAY_SIZE(menu_items))
 		menu_items[menu_item_count++] = &default_menu_items[2];
 
