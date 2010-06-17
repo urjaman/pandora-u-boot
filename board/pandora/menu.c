@@ -70,6 +70,7 @@ static int menu_do_poweroff(struct menu_item *item)
 
 static int menu_do_usb_serial(struct menu_item *item)
 {
+	do_cmd("usbinit");
 	printf("Switched to USB serial.\n");
 
 	setenv("stdout", "usbtty");
@@ -242,7 +243,7 @@ U_BOOT_CMD(
 	""
 );
 
-/* helper */
+/* helpers */
 static int do_ssource(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
 	ulong addr;
@@ -260,4 +261,21 @@ U_BOOT_CMD(
 	ssource, 2, 0, do_ssource,
 	"run script from memory (no header)",
 	"<addr>"
+);
+
+static int do_usbinit(cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+{
+	extern int drv_usbtty_init(void);
+	static int usbinit_done;
+	if (!usbinit_done) {
+		usbinit_done = 1;
+		return !drv_usbtty_init();
+	}
+	return 0;
+}
+
+U_BOOT_CMD(
+	usbinit, 1, 0, do_usbinit,
+	"initialize USB",
+	""
 );

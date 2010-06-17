@@ -239,7 +239,10 @@ int stdio_init (void)
 	serial_stdio_init ();
 #endif
 #ifdef CONFIG_USB_TTY
+/* HACK, we only want it to start when selected from menu */
+#ifndef CONFIG_OMAP3_PANDORA
 	drv_usbtty_init ();
+#endif
 #endif
 #ifdef CONFIG_NETCONSOLE
 	drv_nc_init ();
