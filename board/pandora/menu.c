@@ -68,6 +68,17 @@ static int menu_do_poweroff(struct menu_item *item)
 	return 0;
 }
 
+static int menu_do_usb_serial(struct menu_item *item)
+{
+	printf("Switched to USB serial.\n");
+
+	setenv("stdout", "usbtty");
+	setenv("stdin", "usbtty");
+	setenv("stderr", "usbtty");
+	setenv("bootcmd", "");
+	return 1;
+}
+
 static int menu_do_serial(struct menu_item *item)
 {
 	printf("Switched to serial.\n");
@@ -93,6 +104,7 @@ static int menu_do_script_cmd(struct menu_item *item)
 static struct menu_item default_menu_items[] = {
 	{ "default boot",	menu_do_default, },
 	{ "power off",		menu_do_poweroff, },
+	{ "USB serial prompt",	menu_do_usb_serial, },
 	{ "serial prompt",	menu_do_serial, },
 };
 
@@ -164,8 +176,11 @@ found:
 	}
 
 finish:
-	if (menu_item_count < ARRAY_SIZE(menu_items))
-		menu_items[menu_item_count++] = &default_menu_items[2];
+	for (i = 2; i < ARRAY_SIZE(default_menu_items); i++) {
+		if (menu_item_count >= ARRAY_SIZE(menu_items))
+			break;
+		menu_items[menu_item_count++] = &default_menu_items[i];
+	}
 
 	setenv("stdout", "lcd");
 }

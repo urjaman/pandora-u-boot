@@ -71,6 +71,15 @@
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV	1
 #define CONFIG_SYS_DEVICE_NULLDEV	1
 
+/* USB */
+#define CONFIG_MUSB_UDC			1
+#define CONFIG_USB_OMAP3		1
+#define CONFIG_TWL4030_USB		1
+
+/* USB device configuration */
+#define CONFIG_USB_DEVICE		1
+#define CONFIG_USB_TTY			1
+
 /*
  * Hardware drivers
  */
@@ -170,6 +179,7 @@
 #define CONFIG_BOOTDELAY		0
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
+	"usbtty=cdc_acm\0" \
 	"loadaddr=0x82000000\0" \
 	"bootargs=ubi.mtd=4 ubi.mtd=3 root=ubi0:rootfs rootfstype=ubifs " \
 	"rw rootflags=bulk_read console=ttyS0,115200n8 " \
