@@ -127,7 +127,7 @@ static void menu_init(void)
 	menu_item_count = i;
 
 	if (!do_cmd("mmc init"))
-		return;
+		goto finish;
 
 	dev_desc = get_dev("mmc1", 0);
 	if (dev_desc == NULL) {
