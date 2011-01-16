@@ -121,6 +121,11 @@ int misc_init_r(void)
 
 	dieid_num_r();
 
+	/* pulse wifi nreset, as recommended by manufacturer */
+	writel(GPIO23, &gpio1_base->setdataout);
+	udelay(5000);
+	writel(GPIO23, &gpio1_base->cleardataout);
+
 	/* show boot menu? */
 	if (!(readl(&gpio4_base->datain) & GPIO9))
 		setenv("preboot", "pmenu");
