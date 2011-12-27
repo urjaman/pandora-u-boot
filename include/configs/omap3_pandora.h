@@ -61,6 +61,12 @@
 #define CONFIG_ENV_SIZE			(128 << 10)	/* 128 KiB */
 #define CONFIG_SYS_MALLOC_LEN		(1024 * 1024 + CONFIG_ENV_SIZE)
 
+/* LCD support */
+#define CONFIG_LCD			1
+#define LCD_BPP				LCD_COLOR16
+#define CONFIG_SYS_WHITE_ON_BLACK	1
+#define CONFIG_SYS_CONSOLE_IS_IN_ENV	1
+
 /*
  * Hardware drivers
  */
