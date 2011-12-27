@@ -5,4 +5,4 @@
 # SPDX-License-Identifier:	GPL-2.0+
 #
 
-obj-y	:= pandora.o video.o
+obj-y	:= pandora.o video.o menu.o

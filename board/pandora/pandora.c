@@ -105,6 +105,10 @@ int misc_init_r(void)
 
 	omap_die_id_display();
 
+	/* show boot menu? */
+	if (!(readl(&gpio4_base->datain) & GPIO9))
+		setenv("preboot", "pmenu");
+
 	return 0;
 }
 
