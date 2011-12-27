@@ -65,7 +65,11 @@
 #define CONFIG_LCD			1
 #define LCD_BPP				LCD_COLOR16
 #define CONFIG_SYS_WHITE_ON_BLACK	1
+
+/* used by menu code */
+#define CONFIG_PREBOOT
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV	1
+#define CONFIG_SYS_DEVICE_NULLDEV	1
 
 /*
  * Hardware drivers
@@ -172,7 +176,7 @@
 #endif
 
 /* Environment information */
-#define CONFIG_BOOTDELAY		1
+#define CONFIG_BOOTDELAY		0
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"usbtty=cdc_acm\0" \
@@ -182,12 +186,13 @@
 	"mtdparts=" MTDPARTS_DEFAULT "\0" \
 
 #define CONFIG_BOOTCOMMAND \
-	"if mmc rescan && fatload mmc1 0 ${loadaddr} autoboot.scr || " \
-			"ext2load mmc1 0 ${loadaddr} autoboot.scr; then " \
-		"source ${loadaddr}; " \
+	"if mmc rescan && fatload mmc1 0 ${loadaddr} autoboot.txt || " \
+			"ext2load mmc1 0 ${loadaddr} autoboot.txt; then " \
+		"ssource ${loadaddr}; " \
 	"fi; " \
-	"ubi part boot && ubifsmount ubi:boot && " \
-		"ubifsload ${loadaddr} uImage && bootm ${loadaddr}"
+	"ubi part boot && ubifsmount boot && ubifsload ${loadaddr} uImage && bootm ${loadaddr}; " \
+	"setenv stdout lcd; echo Failed to load kernel, you may need to reflash the firmware.; " \
+	"pmenu"
 
 #define CONFIG_AUTO_COMPLETE	1
 /*
