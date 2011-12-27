@@ -55,7 +55,6 @@ int cleanup_before_linux_select(int flags)
 		* to avoid coherency problems for kernel
 		*/
 		invalidate_dcache_all();
-
 		icache_disable();
 		invalidate_icache_all();
 	} else {
