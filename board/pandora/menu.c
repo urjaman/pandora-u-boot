@@ -116,8 +116,7 @@ static void menu_init(void)
 	const char *check_format1 = "%sload mmc1 0:%d ${loadaddr} boot.scr 4";
 	const char *check_format2 = "%sload mmc1 0:%d ${loadaddr} boot.txt 4";
 	const char *run_format1 = "%sload mmc1 0:%d ${loadaddr} boot.scr;source ${loadaddr}";
-	const char *run_format2 = "mw.l ${loadaddr} 0 1024;%sload mmc1 0:%d ${loadaddr} boot.txt;"
-					"ssource ${loadaddr}";
+	const char *run_format2 = "%sload mmc1 0:%d ${loadaddr} boot.txt;ssource ${loadaddr} ${filesize}";
 	disk_partition_t part_info;
 	block_dev_desc_t *dev_desc;
 	char tmp_name[32], tmp_cmd[128];
@@ -248,21 +247,25 @@ U_BOOT_CMD(
 /* helpers */
 static int do_ssource(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
-	ulong addr;
+	ulong addr, size = 0;
 
 	if (argc < 2)
 		return 1;
 
 	addr = simple_strtoul(argv[1], NULL, 16);
+	if (argc >= 3) {
+		size = simple_strtoul(argv[2], NULL, 16);
+		*(char *)(addr + size) = 0;
+	}
 
-	printf("## Executing plain script at %08lx\n", addr);
+	printf("## Executing plain script at %08lx, size %ld\n", addr, size);
 	return parse_string_outer((char *)addr, FLAG_PARSE_SEMICOLON);
 }
 
 U_BOOT_CMD(
-	ssource, 2, 0, do_ssource,
+	ssource, 3, 0, do_ssource,
 	"run script from memory (no header)",
-	"<addr>"
+	"<addr> [size_hex]"	/* note: without size may parse trash after the script */
 );
 
 static int do_usbinit(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
