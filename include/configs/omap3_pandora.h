@@ -182,15 +182,18 @@
 	"usbtty=cdc_acm\0" \
 	"loadaddr=0x82000000\0" \
 	"bootargs=ubi.mtd=4 ubi.mtd=3 root=ubi0:rootfs rootfstype=ubifs " \
-		"rw rootflags=bulk_read vram=6272K omapfb.vram=0:3000K\0" \
+	"rw rootflags=bulk_read vram=6272K omapfb.vram=0:3000K quiet\0" \
 	"mtdparts=" MTDPARTS_DEFAULT "\0" \
 
 #define CONFIG_BOOTCOMMAND \
 	"if mmc rescan && fatload mmc1 0 ${loadaddr} autoboot.txt || " \
 			"ext2load mmc1 0 ${loadaddr} autoboot.txt; then " \
-		"ssource ${loadaddr}; " \
+		"ssource ${loadaddr} ${filesize}; " \
 	"fi; " \
-	"ubi part boot && ubifsmount boot && ubifsload ${loadaddr} uImage && bootm ${loadaddr}; " \
+	"if ubi part boot && ubifsmount boot; then " \
+		"ubifsload ${loadaddr} autoboot.txt && ssource ${loadaddr} ${filesize}; " \
+		"ubifsload ${loadaddr} uImage && bootm ${loadaddr}; " \
+	"fi; " \
 	"setenv stdout lcd; echo Failed to load kernel, you may need to reflash the firmware.; " \
 	"pmenu"
 
