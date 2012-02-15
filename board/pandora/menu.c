@@ -19,7 +19,7 @@ struct menu_item {
 	char *cmd;
 };
 
-static struct menu_item *menu_items[16];
+static struct menu_item *menu_items[24];
 static int menu_item_count;
 
 static int do_cmd(const char *fmt, ...)
@@ -99,9 +99,83 @@ static int menu_do_script_cmd(struct menu_item *item)
 		failed = 1;
 
 	printf("script %s.\n", failed ? "failed" : "finished");
+	flush_dcache_all();
 	menu_wait_for_input(0);
 	menu_wait_for_input(1);
 	return 0;
+}
+
+static void add_menu_item(const char *name,
+	int (*handler)(struct menu_item *), const char *cmd)
+{
+	struct menu_item *mitem;
+
+	mitem = malloc(sizeof(*mitem));
+	if (mitem == NULL)
+		return;
+	mitem->name = strdup(name);
+	mitem->handler = handler;
+	mitem->cmd = strdup(cmd);
+
+	if (menu_item_count < ARRAY_SIZE(menu_items))
+		menu_items[menu_item_count++] = mitem;
+}
+
+static char *bootmenu_next_ctl(char *p)
+{
+	while (*p && *p != '|' && *p != '\r' && *p != '\n')
+		p++;
+
+	return p;
+}
+
+static char *bootmenu_skip_blanks(char *p)
+{
+	while (*p && (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n'))
+		p++;
+
+	return p;
+}
+
+static char *bootmenu_skip_line(char *p)
+{
+	while (*p && *p != '\r' && *p != '\n')
+		p++;
+
+	return p;
+}
+
+static void parse_bootmenu(char *buf)
+{
+	char *p = buf, *name, *cmd;
+	int i;
+
+	for (i = 1; ; i++)
+	{
+		p = bootmenu_skip_blanks(p);
+		if (*p == 0)
+			break;
+		if (*p == '#') {
+			p = bootmenu_skip_line(p);
+			continue;
+		}
+
+		name = p;
+		p = bootmenu_next_ctl(p);
+		if (*p != '|') {
+			printf("bootmenu.txt: invalid line ~%d\n", i);
+			p = bootmenu_skip_line(p);
+			continue;
+		}
+		*p++ = 0;
+
+		cmd = p;
+		p = bootmenu_skip_line(p);
+		if (*p != 0)
+			*p++ = 0;
+
+		add_menu_item(name, menu_do_script_cmd, cmd);
+	}
 }
 
 static struct menu_item default_menu_items[] = {
@@ -120,7 +194,6 @@ static void menu_init(void)
 	disk_partition_t part_info;
 	block_dev_desc_t *dev_desc;
 	char tmp_name[32], tmp_cmd[128];
-	struct menu_item *mitem;
 	int i;
 
 	for (i = 0; i < 2; i++)
@@ -128,12 +201,12 @@ static void menu_init(void)
 	menu_item_count = i;
 
 	if (!do_cmd("mmc rescan"))
-		goto finish;
+		goto no_mmc;
 
 	dev_desc = get_dev("mmc1", 0);
 	if (dev_desc == NULL) {
 		printf("dev desc null\n");
-		goto finish;
+		goto no_mmc;
 	}
 
 	/* kill stdout while we search for bootfiles */
@@ -167,17 +240,24 @@ static void menu_init(void)
 		continue;
 
 found:
-		mitem = malloc(sizeof(*mitem));
-		if (mitem == NULL)
-			break;
 		sprintf(tmp_name, "boot from SD1:%d", i);
-		mitem->name = strdup(tmp_name);
-		mitem->handler = menu_do_script_cmd;
-		mitem->cmd = strdup(tmp_cmd);
-		menu_items[menu_item_count++] = mitem;
+		add_menu_item(tmp_name, menu_do_script_cmd, tmp_cmd);
 	}
 
-finish:
+no_mmc:
+	setenv("stdout", "serial");
+
+	if (do_cmd("ubi part boot && ubifsmount boot")) {
+		ulong addr = getenv_ulong("loadaddr", 16, 0);
+		if ((int)addr < (int)0x90000000) {
+			if (do_cmd("ubifsload ${loadaddr} bootmenu.txt")) {
+				ulong size = getenv_ulong("filesize", 16, 0);
+				*(char *)(addr + size) = 0;
+				parse_bootmenu((char *)addr);
+			}
+		}
+	}
+
 	for (i = 2; i < ARRAY_SIZE(default_menu_items); i++) {
 		if (menu_item_count >= ARRAY_SIZE(menu_items))
 			break;
@@ -189,12 +269,13 @@ finish:
 
 static int boot_menu(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
-	int tl_row = panel_info.vl_row / 16 / 2 - (menu_item_count + 2) / 2;
 	int i, sel = 0, max_sel;
+	int tl_row;
 	u32 btns;
 
 	menu_init();
 
+	tl_row = panel_info.vl_row / 16 / 2 - (menu_item_count + 2) / 2;
 	max_sel = menu_item_count - 1;
 
 	console_col = 3;
@@ -215,6 +296,7 @@ static int boot_menu(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 			lcd_printf(i == sel ? ">" : " ");
 		}
 
+		flush_dcache_all();
 		menu_wait_for_input(0);
 		btns = menu_wait_for_input(1);
 		if (btns & BTN_UP) {
