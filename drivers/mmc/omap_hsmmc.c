@@ -153,10 +153,10 @@ unsigned char mmc_board_init(struct mmc *mmc)
 
 	writel(readl(&t2_base->devconf0) | MMCSDIO1ADPCLKISEL,
 		&t2_base->devconf0);
-
+/*
 	writel(readl(&t2_base->devconf1) | MMCSDIO2ADPCLKISEL,
 		&t2_base->devconf1);
-
+*/
 	/* Change from default of 52MHz to 26MHz if necessary */
 	if (!(mmc->host_caps & MMC_MODE_HS_52MHz))
 		writel(readl(&t2_base->ctl_prog_io1) & ~CTLPROGIO1SPEEDCTRL,
