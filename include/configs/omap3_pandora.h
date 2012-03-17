@@ -62,6 +62,7 @@
 #define CONFIG_SYS_MALLOC_LEN		(1024 * 1024 + CONFIG_ENV_SIZE)
 
 /* LCD support */
+#define CONFIG_VIDEO_OMAP3		1
 #define CONFIG_LCD			1
 #define LCD_BPP				LCD_COLOR16
 #define CONFIG_SYS_WHITE_ON_BLACK	1
