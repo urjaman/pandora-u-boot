@@ -2,6 +2,8 @@
 #include <asm/io.h>
 #include <lcd.h>
 #include <twl4030.h>
+#include <asm/arch/dss.h>
+#include <asm/arch/sys_proto.h>
 
 #ifdef CONFIG_LCD
 #include "logo.h"
@@ -10,37 +12,51 @@
 #define GPIODATADIR1	0x9b
 #define SETGPIODATAOUT1	0xa4
 
+static const struct panel_config panel_cfg = {
+	.timing_h	= 0x0d504300, /* Horizantal timing */
+	.timing_v	= 0x02202700, /* Vertical timing */
+	.pol_freq	= 0x00007000, /* Pol Freq */
+	.divisor	= 0x00010004, /* 36Mhz Pixel Clock */
+	.lcd_size	= 0x01df031f, /* 800x480 */
+	.panel_type	= 0x01, /* TFT */
+	.data_lines	= 0x03, /* 24 Bit RGB */
+	.load_mode	= 0x02, /* Frame Mode */
+	.panel_color	= 0,
+};
+
 /*
  * Hacky DSS/LCD initialization code
  */
 
 static void dss_lcd_init(uint base_addr)
 {
-	*((volatile uint *) 0x48004D44) = 0x0001b00c; /* DPLL4 multiplier/divider (CM_CLKSEL2_PLL) */
-	*((volatile uint *) 0x48004E40) = 0x0000100c; /* DSS clock divisors */
-	*((volatile uint *) 0x48004D00) = 0x00370037; /* control DPLL3/4 (CM_CLKEN_PLL) */
+	u32 l, div, dpll4;
 
-	*((volatile uint *) 0x48050010) = 0x00000003;
-	while ( !(*((volatile uint *) 0x48050014) & 1) ); /* wait for reset to finish */
+	l = readl(0x48004d44);
+	dpll4 = 26 * ((l >> 8) & 0xfff) / ((l & 0x7f) + 1);
+	if (get_cpu_family() == CPU_OMAP36XX)
+		dpll4 /= 2;
 
-	*((volatile uint *) 0x48050410) = 0x00002015;
-	*((volatile uint *) 0x48050444) = 0x00000004;
-	*((volatile uint *) 0x48050464) = 0x0d504300; /* horizontal timing */
-	*((volatile uint *) 0x48050468) = 0x02202700; /* vertical timing */
-	*((volatile uint *) 0x4805046c) = 0x00007000; /* polarities */
+	/* find and write dpll4 m4 divisor */
+	l = dpll4 / 4; /* / panel_cfg.divisor */
+	for (div = 2; l / div > 36; div++)
+		;
 
-	*((volatile uint *) 0x48050470) = 0x00010002;
+	/* program CM_CLKSEL_DSS m4 divisor */
+	l = readl(0x48004e40);
+	writel((l & ~0x3f) | div, 0x48004e40);
 
-	*((volatile uint *) 0x4805047c) = 0x01df031f; /* display size */
-	*((volatile uint *) 0x48050480) = base_addr;
-	*((volatile uint *) 0x48050484) = base_addr;
-	*((volatile uint *) 0x4805048c) = 0x01df031f;
-	*((volatile uint *) 0x480504a0) = 0x0000008d;
-	*((volatile uint *) 0x480504a4) = 0x03c00200;
+	omap3_dss_panel_config(&panel_cfg);
 
-	*((volatile uint *) 0x48050440) = 0x00018329;
-	while (*((volatile uint *) 0x48050440) & (1<<5)); /* wait for GOLCD */
-	*((volatile uint *) 0x48050440) = 0x00018329;
+	writel(base_addr, 0x48050480);
+	writel(base_addr, 0x48050484);
+	writel(0x01df031f, 0x4805048c);	/* graphics window size */
+	writel(0x0000008d, 0x480504a0);	/* graphics format */
+
+	/* omap3_dss_enable(); */
+	l = readl(0x48050440);
+	l |= LCD_ENABLE | GO_LCD | GP_OUT0 | GP_OUT1;
+	writel(l, 0x48050440);
 }
 
 /* SPI stuff to set correct clock polarity in the LCD */
