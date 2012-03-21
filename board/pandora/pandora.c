@@ -113,6 +113,9 @@ int misc_init_r(void)
 void set_muxconf_regs(void)
 {
 	MUX_PANDORA();
+	if (get_cpu_family() == CPU_OMAP36XX) {
+		MUX_PANDORA_3730();
+	}
 }
 
 #ifdef CONFIG_GENERIC_MMC
