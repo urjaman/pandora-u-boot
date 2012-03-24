@@ -165,7 +165,7 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(MCBSP2_CLKX),	(IDIS | PTD | DIS | M0)) /*McBSP2_CLKX*/\
 	MUX_VAL(CP(MCBSP2_DX),		(IDIS | PTD | DIS | M0)) /*McBSP2_DX*/\
 	MUX_VAL(CP(MCBSP_CLKS),		(IEN  | PTD | DIS | M0)) /*McBSP_CLKS*/\
-	MUX_VAL(CP(MCBSP2_DR),		(IDIS | PTD | DIS | M4)) /*GPIO_118*/\
+	MUX_VAL(CP(MCBSP2_DR),		(IDIS | PTD | EN  | M4)) /*GPIO_118*/\
 								 /* - nPOWERDOWN_DAC*/\
  /*Expansion card 1*/\
 	MUX_VAL(CP(MMC1_CLK),		(IDIS | PTU | EN  | M0)) /*MMC1_CLK*/\
@@ -253,13 +253,13 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(CSI2_DY1),		(IEN  | PTD | DIS | M4)) /*GPIO_115*/\
 								 /* - POP_OVERHEAT*/\
  /*External Resets and Enables*/\
-	MUX_VAL(CP(ETK_D0_ES2),		(IDIS | PTD | DIS | M4)) /*GPIO_14*/\
+	MUX_VAL(CP(ETK_D0_ES2),		(IDIS | PTD | EN  | M4)) /*GPIO_14*/\
 								 /* - nHDPHN_SHUTDOWN*/\
 	MUX_VAL(CP(ETK_D1_ES2),		(IDIS | PTD | DIS | M4)) /*GPIO_15*/\
 								 /* - nBT_SHUTDOWN*/\
 	MUX_VAL(CP(ETK_D9_ES2),		(IDIS | PTD | DIS | M4)) /*GPIO_23*/\
 								 /* - nWIFI_RESET*/\
-	MUX_VAL(CP(MCBSP1_FSR),		(IDIS | PTU | DIS | M4)) /*GPIO_157*/\
+	MUX_VAL(CP(MCBSP1_FSR),		(IDIS | PTD | EN  | M4)) /*GPIO_157*/\
 								 /* - nLCD_RESET*/\
 	MUX_VAL(CP(MCBSP1_CLKR),	(IDIS | PTD | DIS | M4)) /*GPIO_156*/\
 								 /* - RESET_NUBS*/\
