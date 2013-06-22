@@ -107,6 +107,9 @@ static void console_scrollup (void)
 
 	/* Clear the last one */
 	memset (CONSOLE_ROW_LAST, COLOR_MASK(lcd_color_bg), CONSOLE_ROW_SIZE);
+#ifdef CONFIG_VIDEO_OMAP3
+	flush_dcache_all();
+#endif
 }
 
 /*----------------------------------------------------------------------*/
