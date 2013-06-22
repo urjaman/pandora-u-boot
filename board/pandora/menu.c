@@ -91,6 +91,16 @@ static int menu_do_serial(struct menu_item *item)
 	return 1;
 }
 
+static int menu_do_console(struct menu_item *item)
+{
+	printf("Switched to console.\n");
+	setenv("stdout", "lcd");
+	setenv("stderr", "lcd");
+	setenv("stdin",  "kbd");
+	setenv("bootcmd", "");
+	return 1;
+}
+
 static int menu_do_script_cmd(struct menu_item *item)
 {
 	int failed = 0;
@@ -183,6 +193,7 @@ static struct menu_item default_menu_items[] = {
 	{ "power off",		menu_do_poweroff, },
 	{ "USB serial prompt",	menu_do_usb_serial, },
 	{ "serial prompt",	menu_do_serial, },
+	{ "console prompt",	menu_do_console, },
 };
 
 static void menu_init(void)
