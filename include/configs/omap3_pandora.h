@@ -79,6 +79,9 @@
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV	1
 #define CONFIG_SYS_DEVICE_NULLDEV	1
 
+/* TWL4030 keyboard */
+#define CONFIG_KEYBOARD			1
+
 /* USB */
 #define CONFIG_MUSB_UDC			1
 #define CONFIG_USB_OMAP3		1
