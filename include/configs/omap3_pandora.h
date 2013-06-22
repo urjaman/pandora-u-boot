@@ -53,6 +53,14 @@
 /* TWL4030 LED */
 #define CONFIG_TWL4030_LED
 
+/* TWL4030 keyboard */
+#define CONFIG_KEYBOARD			1
+
+/* USB */
+#define CONFIG_MUSB_UDC			1
+#define CONFIG_USB_OMAP3		1
+#define CONFIG_TWL4030_USB		1
+
 /* Initialize GPIOs by default */
 #define CONFIG_OMAP3_GPIO_4	/* GPIO96..127 is in GPIO Bank 4 */
 #define CONFIG_OMAP3_GPIO_6	/* GPIO160..191 is in GPIO Bank 6 */
