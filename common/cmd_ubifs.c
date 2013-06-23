@@ -49,13 +49,20 @@ int ubifs_load(char *filename, u32 addr, u32 size);
 
 int do_ubifs_mount(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
-	char *vol_name;
+	char vol_name[32];
 	int ret;
 
 	if (argc != 2)
 		return CMD_RET_USAGE;
+	
+	if (strncmp(argv[1],"ubi",3)) {
+ 		strcpy(vol_name,"ubi0:");
+		strncpy(vol_name+5,argv[1],26);
+	} else {
+		strncpy(vol_name,argv[1],31);
+	}
+	vol_name[31] = 0;
 
-	vol_name = argv[1];
 	debug("Using volume %s\n", vol_name);
 
 	if (ubifs_initialized == 0) {
