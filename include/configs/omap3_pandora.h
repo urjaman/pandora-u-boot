@@ -194,7 +194,7 @@
 			"ext2load mmc1 0 ${loadaddr} autoboot.txt; then " \
 		"ssource ${loadaddr} ${filesize}; " \
 	"fi; " \
-	"if ubi part boot && ubifsmount boot; then " \
+	"if ubi part boot && ubifsmount ubi0:boot; then " \
 		"ubifsload ${loadaddr} autoboot.txt && ssource ${loadaddr} ${filesize}; " \
 		"ubifsload ${loadaddr} uImage && bootm ${loadaddr}; " \
 	"fi; " \

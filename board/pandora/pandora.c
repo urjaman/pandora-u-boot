@@ -86,6 +86,7 @@ static void set_output_gpio(unsigned int gpio, int value)
  */
 int misc_init_r(void)
 {
+	struct gpio *gpio4_base = (struct gpio *)OMAP34XX_GPIO4_BASE;
 	t2_t *t2_base = (t2_t *)T2_BASE;
 	u32 pbias_lite;
 
@@ -121,10 +122,6 @@ int misc_init_r(void)
 
 	dieid_num_r();
 
-	/* pulse wifi nreset, as recommended by manufacturer */
-	writel(GPIO23, &gpio1_base->setdataout);
-	udelay(5000);
-	writel(GPIO23, &gpio1_base->cleardataout);
 
 	/* show boot menu? */
 	if (!(readl(&gpio4_base->datain) & GPIO9))

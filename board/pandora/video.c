@@ -112,16 +112,16 @@ static void lcd_init(void)
 	lcd_spi_init();
 
 	/* set VPLL2 to 1.8V */
-	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x05,
-			     TWL4030_PM_RECEIVER_VPLL2_DEDICATED);
-	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x20,
-			     TWL4030_PM_RECEIVER_VPLL2_DEV_GRP);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER,
+			     TWL4030_PM_RECEIVER_VPLL2_DEDICATED, 0x05);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 
+			     TWL4030_PM_RECEIVER_VPLL2_DEV_GRP, 0x20);
 
 	/* set VAUX1 to 3.0V (LCD) */
-	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x04,
-			     TWL4030_PM_RECEIVER_VAUX1_DEDICATED);
-	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 0x20,
-			     TWL4030_PM_RECEIVER_VAUX1_DEV_GRP);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 
+			     TWL4030_PM_RECEIVER_VAUX1_DEDICATED, 0x04);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_RECEIVER, 
+			     TWL4030_PM_RECEIVER_VAUX1_DEV_GRP, 0x20);
 
 	/* Clear frame buffer */
 	memset((void *)gd->fb_base, 0, 800*480*2);
@@ -135,14 +135,14 @@ static void lcd_init(void)
 	writel(0, 0x48098048); /* Disable SPI1, CS1 */
 
 	/* Set GPIOs on T2 (Turn on LCD BL) */
-	twl4030_i2c_read_u8(TWL4030_CHIP_INTBR, &d, TWL_INTBR_PMBR1);
+	twl4030_i2c_read_u8(TWL4030_CHIP_INTBR, TWL_INTBR_PMBR1, &d);
 	d &= ~0x0c; /* switch to GPIO function */
-	twl4030_i2c_write_u8(TWL4030_CHIP_INTBR, d, TWL_INTBR_PMBR1);
+	twl4030_i2c_write_u8(TWL4030_CHIP_INTBR, TWL_INTBR_PMBR1, d);
 
-	twl4030_i2c_read_u8(TWL4030_CHIP_GPIO, &d, GPIODATADIR1);
+	twl4030_i2c_read_u8(TWL4030_CHIP_GPIO, GPIODATADIR1, &d);
 	d |= 0x40; /* GPIO6 */
-	twl4030_i2c_write_u8(TWL4030_CHIP_GPIO, d, GPIODATADIR1);
-	twl4030_i2c_write_u8(TWL4030_CHIP_GPIO, 0x40, SETGPIODATAOUT1);
+	twl4030_i2c_write_u8(TWL4030_CHIP_GPIO, GPIODATADIR1, d);
+	twl4030_i2c_write_u8(TWL4030_CHIP_GPIO, SETGPIODATAOUT1, 0x40);
 }
 
 static void draw_logo(void)
@@ -164,15 +164,6 @@ static void draw_logo(void)
 vidinfo_t panel_info = {
 	800, 480, LCD_BPP
 };
-
-/* vars managed by lcd.c */
-int lcd_line_length;
-int lcd_color_fg;
-int lcd_color_bg;
-void *lcd_base;
-void *lcd_console_address;
-short console_col;
-short console_row;
 
 void lcd_enable(void)
 {

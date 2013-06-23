@@ -62,9 +62,9 @@ static int menu_do_poweroff(struct menu_item *item)
 
 	printf("power off.\n");
 
-	twl4030_i2c_read_u8(TWL4030_CHIP_PM_MASTER, &d, TWL4030_PM_MASTER_P1_SW_EVENTS);
+	twl4030_i2c_read_u8(TWL4030_CHIP_PM_MASTER, TWL4030_PM_MASTER_P1_SW_EVENTS, &d);
 	d |= TWL4030_PM_MASTER_SW_EVENTS_DEVOFF;
-	twl4030_i2c_write_u8(TWL4030_CHIP_PM_MASTER, d, TWL4030_PM_MASTER_P1_SW_EVENTS);
+	twl4030_i2c_write_u8(TWL4030_CHIP_PM_MASTER, TWL4030_PM_MASTER_P1_SW_EVENTS, d);
 
 	return 0;
 }
@@ -93,6 +93,7 @@ static int menu_do_serial(struct menu_item *item)
 
 static int menu_do_console(struct menu_item *item)
 {
+	lcd_set_flush_dcache(1);
 	printf("Switched to console.\n");
 	setenv("stdout", "lcd");
 	setenv("stderr", "lcd");
@@ -258,7 +259,7 @@ found:
 no_mmc:
 	setenv("stdout", "serial");
 
-	if (do_cmd("ubi part boot && ubifsmount boot")) {
+	if (do_cmd("ubi part boot && ubifsmount ubi0:boot")) {
 		ulong addr = getenv_ulong("loadaddr", 16, 0);
 		if ((int)addr < (int)0x90000000) {
 			if (do_cmd("ubifsload ${loadaddr} bootmenu.txt")) {
@@ -280,6 +281,7 @@ no_mmc:
 
 static int boot_menu(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
+	int console_col,console_row;
 	int i, sel = 0, max_sel;
 	int tl_row;
 	u32 btns;
@@ -291,6 +293,7 @@ static int boot_menu(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	console_col = 3;
 	console_row = tl_row;
+	lcd_position_cursor(console_col,console_row);
 	lcd_printf("Boot menu");
 
 	while (1)
@@ -298,12 +301,14 @@ static int boot_menu(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 		for (i = 0; i < menu_item_count; i++) {
 			console_col = 3;
 			console_row = tl_row + 2 + i;
+			lcd_position_cursor(console_col,console_row);
 			lcd_printf(menu_items[i]->name);
 		}
 
 		for (i = 0; i < menu_item_count; i++) {
 			console_col = 1;
 			console_row = tl_row + 2 + i;
+			lcd_position_cursor(console_col,console_row);
 			lcd_printf(i == sel ? ">" : " ");
 		}
 
