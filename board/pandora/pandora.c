@@ -38,6 +38,12 @@
 #include <asm/arch/gpio.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/mach-types.h>
+
+#ifdef CONFIG_USB_EHCI
+#include <usb.h>
+#include <asm/ehci-omap.h>
+#endif
+
 #include "pandora.h"
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -109,6 +115,14 @@ int misc_init_r(void)
 	/* enable USB supply */
 	set_output_gpio(164, 1);
 
+#ifdef CONFIG_USB_EHCI
+	/* Set VAUX2 to 1.8V for EHCI PHY */
+	twl4030_pmrecv_vsel_cfg(TWL4030_PM_RECEIVER_VAUX2_DEDICATED,
+				TWL4030_PM_RECEIVER_VAUX2_VSEL_18,
+				TWL4030_PM_RECEIVER_VAUX2_DEV_GRP,
+				TWL4030_PM_RECEIVER_DEV_GRP_P1);
+#endif
+
 	/* wifi needs a short pulse to enter powersave state */
 	set_output_gpio(23, 1);
 	udelay(5000);
@@ -143,6 +157,34 @@ void set_muxconf_regs(void)
 		MUX_PANDORA_3730();
 	}
 }
+
+
+#if defined(CONFIG_USB_EHCI) && !defined(CONFIG_SPL_BUILD)
+/* Call usb_stop() before starting the kernel */
+void show_boot_progress(int val)
+{
+	if (val == BOOTSTAGE_ID_RUN_OS)
+		usb_stop();
+}
+
+static struct omap_usbhs_board_data usbhs_bdata = {
+	.port_mode[0] = OMAP_USBHS_PORT_MODE_UNUSED,
+	.port_mode[1] = OMAP_EHCI_PORT_MODE_PHY,
+	.port_mode[2] = OMAP_USBHS_PORT_MODE_UNUSED
+};
+
+int ehci_hcd_init(int index, struct ehci_hccr **hccr, struct ehci_hcor **hcor)
+{
+	return omap_ehci_hcd_init(&usbhs_bdata, hccr, hcor);
+}
+
+int ehci_hcd_stop(int index)
+{
+	return omap_ehci_hcd_stop();
+}
+
+#endif /* CONFIG_USB_EHCI */
+
 
 #ifdef CONFIG_GENERIC_MMC
 int board_mmc_init(bd_t *bis)

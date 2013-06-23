@@ -91,6 +91,31 @@
 #define CONFIG_USB_DEVICE		1
 #define CONFIG_USB_TTY			1
 
+#if 0
+/* This doesnt work (yet) */
+/* USB EHCI - and everything related */
+#define CONFIG_USB_EHCI			1
+#define CONFIG_USB_EHCI_OMAP		1
+#define CONFIG_CMD_USB			1
+#define CONFIG_USB_STORAGE		1
+#define CONFIG_OMAP_EHCI_PHY1_RESET_GPIO 16
+#define CONFIG_USB_ULPI			1
+#define CONFIG_USB_ULPI_VIEWPORT_OMAP	1
+#define CONFIG_USB_HOST_ETHER		
+#define CONFIG_USB_HOST_ETHER_SMSC95XX	
+#define CONFIG_USB_HOST_ETHER_ASIX	
+#define CONFIG_CMD_NET			
+#define CONFIG_CMD_NFS			
+#define CONFIG_CMD_PING		
+#define CONFIG_CMD_DHCP			
+#else
+
+#undef CONFIG_CMD_NET			
+#undef CONFIG_CMD_NFS			
+#undef CONFIG_CMD_PING		
+#undef CONFIG_CMD_DHCP			
+
+#endif
 /*
  * NS16550 Configuration
  */
@@ -133,8 +158,6 @@
 #undef CONFIG_CMD_FPGA		/* FPGA configuration Support	*/
 #undef CONFIG_CMD_IMI		/* iminfo			*/
 #undef CONFIG_CMD_IMLS		/* List all found images	*/
-#undef CONFIG_CMD_NET		/* bootp, tftpboot, rarpboot	*/
-#undef CONFIG_CMD_NFS		/* NFS support			*/
 
 #define CONFIG_SYS_NO_FLASH
 #define CONFIG_HARD_I2C			1
