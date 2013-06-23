@@ -106,7 +106,7 @@ int twl4030_kbd_init (void)
 	int ret = 0;
 	u8 ctrl;
 	ret = twl4030_i2c_read_u8(TWL4030_CHIP_KEYPAD,
-				  &ctrl, TWL4030_KEYPAD_KEYP_CTRL_REG);
+				  TWL4030_KEYPAD_KEYP_CTRL_REG, &ctrl);
 
 	if (ret)
 		return ret;
@@ -115,18 +115,18 @@ int twl4030_kbd_init (void)
 	ctrl |= TWL4030_KEYPAD_CTRL_KBD_ON;
 	ctrl |= TWL4030_KEYPAD_CTRL_SOFT_NRST;
 	ctrl |= TWL4030_KEYPAD_CTRL_SOFTMODEN;
-	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD, ctrl,
-				    TWL4030_KEYPAD_KEYP_CTRL_REG);
+	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD, 
+				    TWL4030_KEYPAD_KEYP_CTRL_REG, ctrl);
 	/* enable key event status */
-	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD, 0xfe,
-				    TWL4030_KEYPAD_KEYP_IMR1);
+	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD,
+				    TWL4030_KEYPAD_KEYP_IMR1, 0xfe);
 	/* enable interrupt generation on rising and falling */
 	/* this is a workaround for qemu twl4030 emulation */
-	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD, 0x57,
-				    TWL4030_KEYPAD_KEYP_EDR);
+	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD, 
+				    TWL4030_KEYPAD_KEYP_EDR, 0x57);
 	/* enable ISR clear on read */
-	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD, 0x05,
-				    TWL4030_KEYPAD_KEYP_SIH_CTRL);
+	ret |= twl4030_i2c_write_u8(TWL4030_CHIP_KEYPAD, 
+				    TWL4030_KEYPAD_KEYP_SIH_CTRL, 0x05);
 
 	twl_i2c_lock = 0;
 	return 0;
@@ -146,8 +146,8 @@ int twl4030_kbd_tstc(void)
 	for (i = 0; i < 2; i++) {
 
 		/* check interrupt register for events */
-		twl4030_i2c_read_u8(TWL4030_CHIP_KEYPAD, &intr,
-				    TWL4030_KEYPAD_KEYP_ISR1 + (2 * i));
+		twl4030_i2c_read_u8(TWL4030_CHIP_KEYPAD,
+				    TWL4030_KEYPAD_KEYP_ISR1 + (2 * i), &intr);
 
 		/* no event */
 		if (!(intr&1))
