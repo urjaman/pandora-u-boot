@@ -43,6 +43,8 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+#ifdef CONFIG_KEYBOARD
+
 /*
  * TWL4030 keypad handler
  */
@@ -211,3 +213,5 @@ int drv_keyboard_init(void)
 	error = stdio_register (&kbd_dev);
 	return error;
 }
+
+#endif /* CONFIG_KEYBOARD */

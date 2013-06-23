@@ -91,6 +91,7 @@ static int menu_do_serial(struct menu_item *item)
 	return 1;
 }
 
+#ifdef CONFIG_KEYBOARD
 static int menu_do_console(struct menu_item *item)
 {
 	lcd_set_flush_dcache(1);
@@ -101,6 +102,7 @@ static int menu_do_console(struct menu_item *item)
 	setenv("bootcmd", "");
 	return 1;
 }
+#endif
 
 static int menu_do_script_cmd(struct menu_item *item)
 {
@@ -194,7 +196,9 @@ static struct menu_item default_menu_items[] = {
 	{ "power off",		menu_do_poweroff, },
 	{ "USB serial prompt",	menu_do_usb_serial, },
 	{ "serial prompt",	menu_do_serial, },
+#ifdef CONFIG_KEYBOARD
 	{ "console prompt",	menu_do_console, },
+#endif
 };
 
 static void menu_init(void)
