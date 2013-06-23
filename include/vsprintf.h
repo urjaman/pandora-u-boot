@@ -89,7 +89,6 @@ int sprintf(char *buf, const char *fmt, ...)
  * See the vsprintf() documentation for format string extensions over C99.
  */
 int vsprintf(char *buf, const char *fmt, va_list args);
-char *simple_itoa(ulong i);
 
 #ifdef CONFIG_SYS_VSNPRINTF
 /**
