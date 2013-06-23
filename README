@@ -1,3 +1,6 @@
+Just as a note by urjaman: This branch doesnt compile properly with pandoras stock gcc 4.3.3.
+I use my 4.7.4. 
+
 #
 # (C) Copyright 2000 - 2012
 # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
