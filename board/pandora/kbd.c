@@ -49,6 +49,7 @@
 #include <asm/mach-types.h>
 
 #include "pandora-buttons.h"
+#define BTNS_DPAD (BTN_LEFT|BTN_RIGHT|BTN_UP|BTN_DOWN)
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -96,6 +97,41 @@ static u8 old_keys[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 static u8 keybuf[KEYBUF_SIZE];
 static u8 keybuf_head;
 static u8 keybuf_tail;
+static u16 old_buttons;
+
+
+static void pandora_dpad_fill(u16 btn)
+{
+	keybuf[keybuf_tail++] = '\e';
+	keybuf_tail %= KEYBUF_SIZE;
+	keybuf[keybuf_tail++] = '[';
+	keybuf_tail %= KEYBUF_SIZE;
+	if (btn == BTN_UP) /* up */
+		keybuf[keybuf_tail++] = 'A';
+	else if (btn == BTN_LEFT) /* left */
+		keybuf[keybuf_tail++] = 'D';
+	else if (btn == BTN_DOWN) /* down */
+		keybuf[keybuf_tail++] = 'B';
+	else if (btn == BTN_RIGHT) /* right */
+		keybuf[keybuf_tail++] = 'C';
+	keybuf_tail %= KEYBUF_SIZE;
+	return;
+}
+
+static void pandora_dpad_poll(void)
+{
+	struct gpio *gpio4_base = (struct gpio *)OMAP34XX_GPIO4_BASE;
+	u16 buttons = readl(&gpio4_base->datain) & BTNS_DPAD;
+	/* Newly asserted buttons (assert=0) */
+	u16 nb = (old_buttons ^ buttons) & (~buttons);
+	if (nb & BTN_LEFT) pandora_dpad_fill(BTN_LEFT);
+	if (nb & BTN_UP) pandora_dpad_fill(BTN_UP);
+	if (nb & BTN_RIGHT) pandora_dpad_fill(BTN_RIGHT);
+	if (nb & BTN_DOWN) pandora_dpad_fill(BTN_DOWN);
+	/* De-bounce */
+	if (nb) udelay(5000);
+	old_buttons = buttons;
+}
 
 static void twl4030_kp_fill(u8 k, u8 mods)
 {
@@ -144,6 +180,10 @@ int twl4030_kbd_init (void)
 				    TWL4030_KEYPAD_KEYP_SIH_CTRL, 0x05);
 
 	twl_i2c_lock = 0;
+
+	struct gpio *gpio4_base = (struct gpio *)OMAP34XX_GPIO4_BASE;
+	old_buttons = readl(&gpio4_base->datain) & BTNS_DPAD;
+
 	return 0;
 }
 
@@ -156,6 +196,8 @@ int twl4030_kbd_tstc(void)
 	u8 c, r, dk, i;
 	u8 intr;
 	u8 mods;
+
+	pandora_dpad_poll(); /* Check for arrows from the DPAD */
 
 	/* localy lock twl4030 i2c bus */
 	if (test_and_set_bit(0, &twl_i2c_lock))
