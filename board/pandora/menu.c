@@ -6,12 +6,7 @@
 #include <lcd.h>
 #include <twl4030.h>
 
-/* game buttons as in GPIO bank 4 */
-#define BTN_R		GPIO9
-#define BTN_UP		GPIO14
-#define BTN_DOWN	GPIO7
-#define BTN_G2		GPIO15
-#define BTN_G3		GPIO10
+#include "pandora-buttons.h"
 
 struct menu_item {
 	const char *name;

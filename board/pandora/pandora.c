@@ -29,6 +29,7 @@
 #endif
 
 #include "pandora.h"
+#include "pandora-buttons.h"
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -122,7 +123,7 @@ int misc_init_r(void)
 
 
 	/* show boot menu? */
-	if (!(readl(&gpio4_base->datain) & GPIO9))
+	if (!(readl(&gpio4_base->datain) & BTN_R))
 		setenv("preboot", "pmenu");
 
 	return 0;
