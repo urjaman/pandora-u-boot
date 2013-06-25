@@ -167,8 +167,9 @@ void show_boot_progress(int val)
 		usb_stop();
 }
 
+/* This is copied from ti/beagle.c, seems to work as is. */
 static struct omap_usbhs_board_data usbhs_bdata = {
-	.port_mode[0] = OMAP_USBHS_PORT_MODE_UNUSED,
+	.port_mode[0] = OMAP_EHCI_PORT_MODE_PHY,
 	.port_mode[1] = OMAP_EHCI_PORT_MODE_PHY,
 	.port_mode[2] = OMAP_USBHS_PORT_MODE_UNUSED
 };

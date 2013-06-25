@@ -91,31 +91,6 @@
 #define CONFIG_USB_DEVICE		1
 #define CONFIG_USB_TTY			1
 
-#if 0
-/* This doesnt work (yet) */
-/* USB EHCI - and everything related */
-#define CONFIG_USB_EHCI			1
-#define CONFIG_USB_EHCI_OMAP		1
-#define CONFIG_CMD_USB			1
-#define CONFIG_USB_STORAGE		1
-#define CONFIG_OMAP_EHCI_PHY1_RESET_GPIO 16
-#define CONFIG_USB_ULPI			1
-#define CONFIG_USB_ULPI_VIEWPORT_OMAP	1
-#define CONFIG_USB_HOST_ETHER		
-#define CONFIG_USB_HOST_ETHER_SMSC95XX	
-#define CONFIG_USB_HOST_ETHER_ASIX	
-#define CONFIG_CMD_NET			
-#define CONFIG_CMD_NFS			
-#define CONFIG_CMD_PING		
-#define CONFIG_CMD_DHCP			
-#else
-
-#undef CONFIG_CMD_NET			
-#undef CONFIG_CMD_NFS			
-#undef CONFIG_CMD_PING		
-#undef CONFIG_CMD_DHCP			
-
-#endif
 /*
  * NS16550 Configuration
  */
@@ -164,6 +139,34 @@
 #define CONFIG_SYS_I2C_SPEED		100000
 #define CONFIG_SYS_I2C_SLAVE		1
 #define CONFIG_DRIVER_OMAP34XX_I2C	1
+
+#if 1 /* USB EHCI - and everything related */
+
+#define CONFIG_USB_EHCI			1
+#define CONFIG_USB_EHCI_OMAP		1
+#define CONFIG_CMD_USB			1
+#define CONFIG_USB_STORAGE		1
+#define CONFIG_OMAP_EHCI_PHY1_RESET_GPIO 16
+#define CONFIG_USB_ULPI			1
+#define CONFIG_USB_ULPI_VIEWPORT_OMAP	1
+#define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS 3
+#define CONFIG_USB_HOST_ETHER		
+#define CONFIG_USB_HOST_ETHER_SMSC95XX	
+#define CONFIG_USB_HOST_ETHER_ASIX	
+#define CONFIG_CMD_NET			
+#define CONFIG_CMD_NFS			
+#define CONFIG_CMD_PING		
+#define CONFIG_CMD_DHCP			
+
+#else
+
+#undef CONFIG_CMD_NET			
+#undef CONFIG_CMD_NFS			
+#undef CONFIG_CMD_PING		
+#undef CONFIG_CMD_DHCP			
+
+#endif
+
 
 /*
  * TWL4030
