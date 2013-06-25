@@ -197,8 +197,6 @@ static inline void console_back(void)
 			console_row = 0;
 	}
 
-	lcd_putc_xy(console_col * VIDEO_FONT_WIDTH,
-		console_row * VIDEO_FONT_HEIGHT, ' ');
 }
 
 /*----------------------------------------------------------------------*/
@@ -225,6 +223,9 @@ void lcd_putc(const char c)
 	}
 
 	switch (c) {
+	case '\a': /* I guess we'll just live without a bell,
+			 we're just an lcd. Todo: visual bell? :P */
+		return;
 	case '\r':
 		console_col = 0;
 
