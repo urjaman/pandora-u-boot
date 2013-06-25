@@ -293,7 +293,7 @@ static int boot_menu(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	console_col = 3;
 	console_row = tl_row;
 	lcd_position_cursor(console_col,console_row);
-	lcd_printf("Boot menu");
+	lcd_printf("Boot menu, LOL!");
 
 	while (1)
 	{
