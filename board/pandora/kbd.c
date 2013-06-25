@@ -48,6 +48,8 @@
 #include <asm/arch/sys_proto.h>
 #include <asm/mach-types.h>
 
+#include "pandora-buttons.h"
+
 DECLARE_GLOBAL_DATA_PTR;
 
 #ifdef CONFIG_KEYBOARD
@@ -179,13 +181,14 @@ int twl4030_kbd_tstc(void)
 		if (keys[7]&0x08) mods |= 4; /* Shift */
 
 		/* Add L from GPIOs as shift also */
-	 	if (!(readl(&gpio4_base->datain) & GPIO6)) /* R */
+	 	if (!(readl(&gpio4_base->datain) & BTN_L)) /* L */
 			mods |= 4;
 
 		/* Add ctrl state from the GPIOs (R or select) */
-	 	if (!(readl(&gpio4_base->datain) & GPIO9)) /* R */
+	 	if (!(readl(&gpio4_base->datain) & BTN_R)) /* R */
 			mods |= 1;
-	 	if (!(readl(&gpio4_base->datain) & GPIO8)) /* Select */
+
+	 	if (!(readl(&gpio4_base->datain) & BTN_SELECT)) /* Select */
 			mods |= 1;
 
 		for (c = 0; c < 8; c++) {
