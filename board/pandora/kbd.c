@@ -40,6 +40,13 @@
 #include <stdio_dev.h>
 #include <lcd.h>
 #include <twl4030.h>
+#include <asm/io.h>
+#include <asm/gpio.h>
+#include <asm/arch/mmc_host_def.h>
+#include <asm/arch/mux.h>
+#include <asm/arch/gpio.h>
+#include <asm/arch/sys_proto.h>
+#include <asm/mach-types.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -96,6 +103,10 @@ static void twl4030_kp_fill(u8 k, u8 mods)
 		k = keymap[k+128];
 	} else {
 		k = keymap[k];
+		if (mods & 1) { /* ctrl key was pressed */
+			if (k >= 'a' && k <= 'z')
+				k -= 'a' - 1;
+		}
 	}
 	if (k) {
 		keybuf[keybuf_tail++] = k;
@@ -134,8 +145,12 @@ int twl4030_kbd_init (void)
 	return 0;
 }
 
+
+
+
 int twl4030_kbd_tstc(void)
 {
+	struct gpio *gpio4_base = (struct gpio *)OMAP34XX_GPIO4_BASE;
 	u8 c, r, dk, i;
 	u8 intr;
 	u8 mods;
@@ -162,6 +177,16 @@ int twl4030_kbd_tstc(void)
 		/* take modifier keys from the keystate */
 		mods = keys[2]&0x20?2:0;     /* Fn */
 		if (keys[7]&0x08) mods |= 4; /* Shift */
+
+		/* Add L from GPIOs as shift also */
+	 	if (!(readl(&gpio4_base->datain) & GPIO6)) /* R */
+			mods |= 4;
+
+		/* Add ctrl state from the GPIOs (R or select) */
+	 	if (!(readl(&gpio4_base->datain) & GPIO9)) /* R */
+			mods |= 1;
+	 	if (!(readl(&gpio4_base->datain) & GPIO8)) /* Select */
+			mods |= 1;
 
 		for (c = 0; c < 8; c++) {
 
