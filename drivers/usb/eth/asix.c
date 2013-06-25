@@ -596,6 +596,8 @@ static const struct asix_dongle const asix_dongles[] = {
 	{ 0x2001, 0x3c05, FLAG_TYPE_AX88772 },
 	/* ASIX 88772B */
 	{ 0x0b95, 0x772b, FLAG_TYPE_AX88772B | FLAG_EEPROM_MAC },
+	/* USBLINK HG20F9 */
+	{ 0x066b, 0x20f9, FLAG_TYPE_AX88772B | FLAG_EEPROM_MAC },
 	{ 0x0000, 0x0000, FLAG_NONE }	/* END - Do not remove */
 };
 
