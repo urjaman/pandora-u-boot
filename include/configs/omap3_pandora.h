@@ -81,6 +81,7 @@
 
 /* TWL4030 keyboard */
 #define CONFIG_KEYBOARD			1
+#define CONFIG_CMDLINE_EDITING		1
 
 /* USB */
 #define CONFIG_MUSB_UDC			1
