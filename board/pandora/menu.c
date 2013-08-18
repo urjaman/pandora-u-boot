@@ -6,6 +6,8 @@
 #include <lcd.h>
 #include <twl4030.h>
 
+
+#include "pandora.h"
 #include "pandora-buttons.h"
 
 struct menu_item {
@@ -284,6 +286,8 @@ static int boot_menu(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	int i, sel = 0, max_sel;
 	int tl_row;
 	u32 btns;
+
+	i2c_set_bus_num(TWL4030_I2C_BUS);
 
 	menu_init();
 

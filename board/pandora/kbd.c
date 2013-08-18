@@ -48,6 +48,7 @@
 #include <asm/arch/sys_proto.h>
 #include <asm/mach-types.h>
 
+#include "pandora.h"
 #include "pandora-buttons.h"
 #define BTNS_DPAD (BTN_LEFT|BTN_RIGHT|BTN_UP|BTN_DOWN)
 
@@ -156,6 +157,8 @@ int twl4030_kbd_init (void)
 {
 	int ret = 0;
 	u8 ctrl;
+	i2c_set_bus_num(TWL4030_I2C_BUS);
+
 	ret = twl4030_i2c_read_u8(TWL4030_CHIP_KEYPAD,
 				  TWL4030_KEYPAD_KEYP_CTRL_REG, &ctrl);
 
@@ -203,6 +206,9 @@ int twl4030_kbd_tstc(void)
 	if (test_and_set_bit(0, &twl_i2c_lock))
 		return 0;
 
+	int bus = I2C_GET_BUS();
+	i2c_set_bus_num(TWL4030_I2C_BUS);
+
 	/* twl4030 remembers up to 2 events */
 	for (i = 0; i < 2; i++) {
 
@@ -249,6 +255,8 @@ int twl4030_kbd_tstc(void)
 		}
 
 	}
+
+	i2c_set_bus_num(bus);
 
 	/* localy unlock twl4030 i2c bus */
 	test_and_clear_bit(0, &twl_i2c_lock);

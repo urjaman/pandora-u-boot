@@ -20,14 +20,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  * MA 02111-1307 USA
  */
+#include <asm/arch/mmc_host_def.h>
+#include <asm/arch/mux.h>
+#include <asm/arch/sys_proto.h>
+#include <asm/mach-types.h>
+
 #ifndef _PANDORA_H_
 #define _PANDORA_H_
-
-const omap3_sysinfo sysinfo = {
-	DDR_STACKED,
-	"OMAP3 Pandora",
-	"NAND",
-};
 
 /*
  * IEN  - Input Enable
@@ -404,5 +403,7 @@ const omap3_sysinfo sysinfo = {
 	MUX_VAL(CP(GPIO127),		(IEN  | PTD | DIS | M4)) /*GPIO_127 - MMC2_WP*/\
 	MUX_VAL(CP(GPIO128),		(IDIS | PTD | DIS | M4)) /*GPIO_128 - LED_MMC1*/\
 	MUX_VAL(CP(GPIO129),		(IDIS | PTD | DIS | M4)) /*GPIO_129 - LED_MMC2*/
+
+#define TWL4030_I2C_BUS			0
 
 #endif

@@ -44,6 +44,12 @@
 #include <asm/ehci-omap.h>
 #endif
 
+const omap3_sysinfo sysinfo = {
+	DDR_STACKED,
+	"OMAP3 Pandora",
+	"NAND",
+};
+
 #include "pandora.h"
 #include "pandora-buttons.h"
 
@@ -96,6 +102,8 @@ int misc_init_r(void)
 	struct gpio *gpio4_base = (struct gpio *)OMAP34XX_GPIO4_BASE;
 	t2_t *t2_base = (t2_t *)T2_BASE;
 	u32 pbias_lite;
+
+	i2c_set_bus_num(TWL4030_I2C_BUS);
 
 	twl4030_led_init(TWL4030_LED_LEDEN_LEDBON);
 

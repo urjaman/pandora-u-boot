@@ -140,6 +140,10 @@
 #define CONFIG_SYS_I2C_SPEED		100000
 #define CONFIG_SYS_I2C_SLAVE		1
 #define CONFIG_DRIVER_OMAP34XX_I2C	1
+#if 1 /* Access to the bq27500 fuel gauge */
+#define CONFIG_I2C_MULTI_BUS		1
+#define CONFIG_SYS_MAX_I2C_BUS		3
+#endif
 
 #if 1 /* USB EHCI - and everything related */
 
