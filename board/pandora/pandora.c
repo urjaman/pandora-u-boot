@@ -41,6 +41,18 @@ DECLARE_GLOBAL_DATA_PTR;
 #define GPIO_IO_PWRDNZ			(1 << 6)
 #define PBIASLITEVMODE1			(1 << 8)
 
+static const struct ns16550_platdata pandora_serial = {
+	.base = OMAP34XX_UART3,
+	.reg_shift = 2,
+	.clock = V_NS16550_CLK
+};
+
+U_BOOT_DEVICE(pandora_uart) = {
+	"ns16550_serial",
+	&pandora_serial
+};
+
+
 /*
  * Routine: board_init
  * Description: Early hardware init.
