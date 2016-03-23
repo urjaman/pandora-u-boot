@@ -43,6 +43,8 @@
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV	1
 #define CONFIG_SYS_DEVICE_NULLDEV	1
 
+#define CONFIG_USB_TTY			1
+
 /*
  * Hardware drivers
  */
@@ -55,10 +57,10 @@
 
 /* TWL4030 keyboard */
 #define CONFIG_KEYBOARD			1
-#define CONFIG_CMDLINE_EDITING		1
 
 /* USB */
-#define CONFIG_MUSB_UDC			1
+#define CONFIG_USB_DEVICE		1
+#define CONFIG_USB_MUSB_UDC		1
 #define CONFIG_USB_OMAP3		1
 #define CONFIG_TWL4030_USB		1
 
@@ -120,11 +122,6 @@
 
 
 /*
- * TWL4030
- */
-#define CONFIG_TWL4030_POWER		1
-
-/*
  * Board NAND Info.
  */
 #define CONFIG_SYS_NAND_ADDR		NAND_BASE	/* physical address */
@@ -152,6 +149,8 @@
 #endif
 
 /* Environment information */
+
+#undef CONFIG_BOOTDELAY
 #define CONFIG_BOOTDELAY		0
 
 #define CONFIG_EXTRA_ENV_SETTINGS \

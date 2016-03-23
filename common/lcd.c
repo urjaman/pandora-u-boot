@@ -76,122 +76,6 @@ void lcd_set_flush_dcache(int flush)
 	lcd_flush_dcache = (flush != 0);
 }
 
-/*----------------------------------------------------------------------*/
-
-static void console_scrollup(void)
-{
-	const int rows = CONFIG_CONSOLE_SCROLL_LINES;
-
-	/* Copy up rows ignoring those that will be overwritten */
-	memcpy(CONSOLE_ROW_FIRST,
-	       lcd_console_address + CONSOLE_ROW_SIZE * rows,
-	       CONSOLE_SIZE - CONSOLE_ROW_SIZE * rows);
-
-	/* Clear the last rows */
-	memset(lcd_console_address + CONSOLE_SIZE - CONSOLE_ROW_SIZE * rows,
-		COLOR_MASK(lcd_color_bg),
-		CONSOLE_ROW_SIZE * rows);
-
-	lcd_sync();
-	console_row -= rows;
-}
-
-/*----------------------------------------------------------------------*/
-
-static inline void console_back(void)
-{
-	if (--console_col < 0) {
-		console_col = CONSOLE_COLS-1 ;
-		if (--console_row < 0)
-			console_row = 0;
-	}
-
-}
-
-/*----------------------------------------------------------------------*/
-
-static inline void console_newline(void)
-{
-	console_col = 0;
-
-	/* Check if we need to scroll the terminal */
-	if (++console_row >= CONSOLE_ROWS)
-		console_scrollup();
-	else
-		lcd_sync();
-}
-
-/*----------------------------------------------------------------------*/
-
-void lcd_putc(const char c)
-{
-	if (!lcd_is_enabled) {
-		serial_putc(c);
-
-		return;
-	}
-
-	switch (c) {
-	case '\a': /* I guess we'll just live without a bell,
-			 we're just an lcd. Todo: visual bell? :P */
-		return;
-	case '\r':
-		console_col = 0;
-
-		return;
-	case '\n':
-		console_newline();
-
-		return;
-	case '\t':	/* Tab (8 chars alignment) */
-		console_col +=  8;
-		console_col &= ~7;
-
-		if (console_col >= CONSOLE_COLS)
-			console_newline();
-
-		return;
-	case '\b':
-		console_back();
-
-		return;
-	default:
-		lcd_putc_xy(console_col * VIDEO_FONT_WIDTH,
-			console_row * VIDEO_FONT_HEIGHT, c);
-		if (++console_col >= CONSOLE_COLS)
-			console_newline();
-	}
-}
-
-/*----------------------------------------------------------------------*/
-
-void lcd_puts(const char *s)
-{
-	if (!lcd_is_enabled) {
-		serial_puts(s);
-
-		return;
-	}
-
-	while (*s)
-		lcd_putc(*s++);
-
-	lcd_sync();
-}
-
-/*----------------------------------------------------------------------*/
-
-void lcd_printf(const char *fmt, ...)
-{
-	va_list args;
-	char buf[CONFIG_SYS_PBSIZE];
-
-	va_start(args, fmt);
-	vsprintf(buf, fmt, args);
-	va_end(args);
-
-	lcd_puts(buf);
-}
 
 /************************************************************************/
 /* ** Low-Level Graphics Routines					*/
@@ -258,8 +142,6 @@ static void lcd_drawchars(ushort x, ushort y, uchar *str, int count)
 }
 
 /*----------------------------------------------------------------------*/
-
-/* static inline void lcd_puts_xy(ushort x, ushort y, uchar *s) ??? */
 
 static void lcd_stub_putc(struct stdio_dev *dev, const char c)
 {

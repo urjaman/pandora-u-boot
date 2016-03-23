@@ -190,7 +190,7 @@ int twl4030_kbd_init (void)
 
 
 
-int twl4030_kbd_tstc(void)
+int twl4030_kbd_tstc(struct stdio_dev *sdev)
 {
 	struct gpio *gpio4_base = (struct gpio *)OMAP34XX_GPIO4_BASE;
 	u8 c, r, dk, i;
@@ -256,10 +256,10 @@ int twl4030_kbd_tstc(void)
 	return (KEYBUF_SIZE + keybuf_tail - keybuf_head)%KEYBUF_SIZE;
 }
 
-int twl4030_kbd_getc(void)
+int twl4030_kbd_getc(struct stdio_dev *sdev)
 {
 	keybuf_head %= KEYBUF_SIZE;
-	while (!twl4030_kbd_tstc())
+	while (!twl4030_kbd_tstc(sdev))
 		/* Just pass the time and hope no watchdogs eat us.. */;
 	return keybuf[keybuf_head++];
 }
@@ -275,7 +275,7 @@ int drv_keyboard_init(void)
 	/* register the keyboard */
 	memset (&kbd_dev, 0, sizeof(struct stdio_dev));
 	strcpy(kbd_dev.name, "kbd");
-	kbd_dev.flags =  DEV_FLAGS_INPUT | DEV_FLAGS_SYSTEM;
+	kbd_dev.flags =  DEV_FLAGS_INPUT;
 	kbd_dev.putc = NULL;
 	kbd_dev.puts = NULL;
 	kbd_dev.getc = twl4030_kbd_getc;

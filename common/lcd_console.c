@@ -96,9 +96,6 @@ static inline void console_back(void)
 			cons.curr_row = 0;
 	}
 
-	cons.fp_putc_xy(&cons,
-			cons.curr_col * VIDEO_FONT_WIDTH,
-			cons.curr_row * VIDEO_FONT_HEIGHT, ' ');
 }
 
 static inline void console_newline(void)

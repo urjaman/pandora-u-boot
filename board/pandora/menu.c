@@ -1,10 +1,13 @@
 #include <common.h>
 #include <asm/io.h>
 #include <asm/arch/gpio.h>
-#include <hush.h>
+#include <cli.h>
+#include <cli_hush.h>
 #include <malloc.h>
 #include <lcd.h>
+#include <part.h>
 #include <twl4030.h>
+#include <stdio_dev.h>
 
 #include "pandora-buttons.h"
 
@@ -203,7 +206,7 @@ static void menu_init(void)
 	const char *run_format1 = "%sload mmc1 0:%d ${loadaddr} boot.scr;source ${loadaddr}";
 	const char *run_format2 = "%sload mmc1 0:%d ${loadaddr} boot.txt;ssource ${loadaddr} ${filesize}";
 	disk_partition_t part_info;
-	block_dev_desc_t *dev_desc;
+	struct blk_desc *dev_desc;
 	char tmp_name[32], tmp_cmd[128];
 	int i;
 
@@ -214,7 +217,7 @@ static void menu_init(void)
 	if (!do_cmd("mmc rescan"))
 		goto no_mmc;
 
-	dev_desc = get_dev("mmc1", 0);
+	dev_desc = blk_get_dev("mmc1", 0);
 	if (dev_desc == NULL) {
 		printf("dev desc null\n");
 		goto no_mmc;
@@ -224,7 +227,7 @@ static void menu_init(void)
 	setenv("stdout", "nulldev");
 
 	for (i = 1; menu_item_count < ARRAY_SIZE(menu_items); i++) {
-		if (get_partition_info(dev_desc, i, &part_info))
+		if (part_get_info(dev_desc, i, &part_info))
 			break;
 		if (do_cmd("fatls mmc1 0:%d", i)) {
 			if (do_cmd(check_format1, "fat", i)) {

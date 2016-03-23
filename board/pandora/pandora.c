@@ -144,6 +144,7 @@ void set_muxconf_regs(void)
 }
 
 
+
 #if defined(CONFIG_USB_EHCI) && !defined(CONFIG_SPL_BUILD)
 /* Call usb_stop() before starting the kernel */
 void show_boot_progress(int val)
@@ -152,16 +153,16 @@ void show_boot_progress(int val)
 		usb_stop();
 }
 
-/* This is copied from ti/beagle.c, seems to work as is. */
 static struct omap_usbhs_board_data usbhs_bdata = {
 	.port_mode[0] = OMAP_EHCI_PORT_MODE_PHY,
 	.port_mode[1] = OMAP_EHCI_PORT_MODE_PHY,
 	.port_mode[2] = OMAP_USBHS_PORT_MODE_UNUSED
 };
 
-int ehci_hcd_init(int index, struct ehci_hccr **hccr, struct ehci_hcor **hcor)
+int ehci_hcd_init(int index, enum usb_init_type init,
+		struct ehci_hccr **hccr, struct ehci_hcor **hcor)
 {
-	return omap_ehci_hcd_init(&usbhs_bdata, hccr, hcor);
+	return omap_ehci_hcd_init(index, &usbhs_bdata, hccr, hcor);
 }
 
 int ehci_hcd_stop(int index)
