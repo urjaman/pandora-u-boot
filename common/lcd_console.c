@@ -113,8 +113,12 @@ static inline void console_newline(void)
 		for (i = 0; i < rows; i++)
 			cons.fp_console_setrow(&cons, cons.rows-i-1, bg_color);
 		cons.curr_row -= rows;
+		#ifdef CONFIG_VIDEO_OMAP3
+			flush_dcache_all();
+		#endif
+	} else {
+		lcd_sync();
 	}
-	lcd_sync();
 }
 
 void console_calc_rowcol(struct console_t *pcons, u32 sizex, u32 sizey)
