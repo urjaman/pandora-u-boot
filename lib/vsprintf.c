@@ -7,6 +7,8 @@
 /* vsprintf.c -- Lars Wirzenius & Linus Torvalds. */
 /*
  * Wirzenius wrote this portably, Torvalds fucked it up :-)
+ *
+ * from hush: simple_itoa() was lifted from boa-0.93.15
  */
 
 #include <stdarg.h>
@@ -726,4 +728,50 @@ void __assert_fail(const char *assertion, const char *file, unsigned line,
 	/* This will not return */
 	panic("%s:%u: %s: Assertion `%s' failed.", file, line, function,
 	      assertion);
+}
+
+char *simple_itoa(ulong i)
+{
+	/* 21 digits plus null terminator, good for 64-bit or smaller ints */
+	static char local[22];
+	char *p = &local[21];
+
+	*p-- = '\0';
+	do {
+		*p-- = '0' + i % 10;
+		i /= 10;
+	} while (i > 0);
+	return p + 1;
+}
+
+/* We don't seem to have %'d in U-Boot */
+void print_grouped_ull(unsigned long long int_val, int digits)
+{
+	char str[21], *s;
+	int grab = 3;
+
+	digits = (digits + 2) / 3;
+	sprintf(str, "%*llu", digits * 3, int_val);
+	for (s = str; *s; s += grab) {
+		if (s != str)
+			putc(s[-1] != ' ' ? ',' : ' ');
+		printf("%.*s", grab, s);
+		grab = 3;
+	}
+}
+
+bool str2off(const char *p, loff_t *num)
+{
+	char *endptr;
+
+	*num = simple_strtoull(p, &endptr, 16);
+	return *p != '\0' && *endptr == '\0';
+}
+
+bool str2long(const char *p, ulong *num)
+{
+	char *endptr;
+
+	*num = simple_strtoul(p, &endptr, 16);
+	return *p != '\0' && *endptr == '\0';
 }
